@@ -90,4 +90,9 @@ export class ConsultaComponent {
     }
   }
 
+  enviarRespuestas() {
+    console.log('Enviando respuestas -> ', this.consulta.respuestas);
+    
+  }
+
 }

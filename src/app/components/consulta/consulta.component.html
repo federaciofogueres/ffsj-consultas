@@ -20,6 +20,14 @@
             </swiper-slide>
         }
     </swiper-container>
+    <div class="d-flex justify-content-center mt-4">
+        <button class="btn btn-primary" 
+            (click)="enviarRespuestas()"
+            [disabled]="consulta.respuestas.length !== consulta.preguntas.length"
+        >
+            Enviar respuestas
+        </button>
+    </div>
 </div>
 
 <!-- <script>
