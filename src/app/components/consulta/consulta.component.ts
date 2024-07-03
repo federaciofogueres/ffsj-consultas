@@ -1,4 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
 import { Consulta } from '../../models/consulta.model';
 import { Opcion } from '../../models/opcion.model';
 import { Pregunta } from '../../models/pregunta.model';
@@ -57,6 +58,10 @@ export class ConsultaComponent {
   }
   preguntaActual: Pregunta = this.consulta.preguntas[0];
 
+  constructor(
+    private cookiesService: CookieService
+  ){}
+
   cambiaPreguntaActual(indexPregunta: number) {
     this.preguntaActual = this.consulta.preguntas[indexPregunta];
   }
@@ -92,7 +97,12 @@ export class ConsultaComponent {
 
   enviarRespuestas() {
     console.log('Enviando respuestas -> ', this.consulta.respuestas);
-    
+    // this.cookiesService.set('respuestas', JSON.stringify(this.consulta.respuestas));
+    if (Boolean(this.cookiesService.get('href'))) {
+      window.location.href = this.cookiesService.get('href');
+    } else {
+      console.log('No se ha encontrado la URL de redirección');
+    }
   }
 
 }
