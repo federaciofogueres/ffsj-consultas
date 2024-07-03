@@ -1,0 +1,33 @@
+<div class="container pt-4">
+    <swiper-container 
+        slides-per-view="1"
+        navigation
+        (swiperactiveindexchange)="onSlideChange($event)"
+    >
+        @for (pregunta of consulta.preguntas; track $index) {
+            <swiper-slide>
+                <div class="container">
+                    <app-pregunta
+                        [pregunta]="pregunta"
+                    ></app-pregunta>
+                    <div class="mx-3 mt-3">
+                        <app-opciones
+                            [opciones]="pregunta.opciones"
+                            (respuestaSeleccionada)="guardaRespuesta($event)"
+                        ></app-opciones>
+                    </div>
+                </div>
+            </swiper-slide>
+        }
+    </swiper-container>
+</div>
+
+<!-- <script>
+    const swiperEl = document.querySelector('.swiper-container');
+    swiperEl.addEventListener('swiperslidechanges', (event) => {
+        console.log('Evento swiperslidechanges', event);
+    });
+    swiperEl.addEventListener('swiperslidechange', (event) => {
+        console.log('Evento swiperslidechange', event);
+    });
+</script> -->

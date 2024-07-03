@@ -1,0 +1,20 @@
+<div class="header-pregunta">
+    <img src="../../../assets/logofede.png" alt="Logo FFSJ">
+
+    <div class="info-pregunta">
+      <div class="numero">
+        <!-- <h1 class="m-0" *ngIf="pregunta.id! < 0 && pregunta.id! !== -2306 && pregunta.id! !== -2307">CUESTIONARIO</h1> -->
+        <h1 class="m-0">CONSULTA FFSJ</h1>
+        <!-- <h1 class="m-0" *ngIf="pregunta.id! >= 0">PREGUNTA {{pregunta.id}}</h1> -->
+        <!-- <h1 class="m-0" *ngIf="pregunta.id === -2306 || pregunta.id === -2307">¡GRACIAS!</h1> -->
+      </div>
+      
+      <div class="titulo m-3">
+        <h3>{{pregunta.titulo | uppercase}}</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="enunciado mt-4 ms-3">
+    <span>{{pregunta.enunciado}}</span>
+  </div>
