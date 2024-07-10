@@ -31,8 +31,8 @@ export class ConsultaComponent {
   respuestas: RespuestaUsuario[] = [];
 
   constructor(
-    private cookiesService: CookieService,
     private consultasService: ConsultasService,
+    private cookiesService: CookieService,
     private respuestasUsuariosService: RespuestasUsuariosService,
     private activatedRoute: ActivatedRoute,
     private authService: AuthService
