@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { Pregunta } from '../../models/pregunta.model';
+import { Pregunta } from '../../../api';
 
 @Component({
   selector: 'app-pregunta',

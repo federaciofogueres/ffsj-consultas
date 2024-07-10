@@ -1,9 +1,9 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { AuthService } from 'ffsj-web-components';
+import { jwtDecode } from "jwt-decode";
 import { CookieService } from 'ngx-cookie-service';
-import { Consulta } from '../../models/consulta.model';
-import { Opcion } from '../../models/opcion.model';
-import { Pregunta } from '../../models/pregunta.model';
-import { Respuesta } from '../../models/respuesta.model';
+import { Consulta, ConsultasService, OpcionRespuesta, ResponseConsulta, ResponseStatus, RespuestasUsuariosService, RespuestaUsuario } from '../../../api';
 import { OpcionesComponent } from '../opciones/opciones.component';
 import { PreguntaComponent } from '../pregunta/pregunta.component';
 
@@ -20,84 +20,89 @@ import { PreguntaComponent } from '../pregunta/pregunta.component';
 })
 export class ConsultaComponent {
 
+  idUsuario: number = -1;
   consulta: Consulta = {
     id: 0,
-    preguntas: [
-      {
-        id: 1,
-        titulo: '¿Cuál debe ser la foguera ejemplar 2024?',
-        enunciado: 'Elige una de las candidatas',
-        opciones: [
-          { id: 1, respuesta: 'Florida Porrazo', active: true },
-          { id: 2, respuesta: 'Antiguones', active: true },
-          { id: 3, respuesta: 'La cerámica de Talavera', active: true }
-        ]
-      },
-      {
-        id: 2,
-        titulo: '¿Cuál debe ser la foguera ejemplar infantil 2024?',
-        enunciado: 'Elige una de las candidatas',
-        opciones: [
-          { id: 1, respuesta: 'Florida Portazgo', active: true },
-          { id: 2, respuesta: 'Antiguones', active: true },
-          { id: 3, respuesta: 'Antiguones en rojo', active: true }
-        ]
-      },
-      {
-        id: 3,
-        titulo: '¿Cuál debe ser la barraca ejemplar 2024?',
-        enunciado: 'Elige una de las candidatas',
-        opciones: [
-          { id: 1, respuesta: 'La millor de totes', active: true },
-          { id: 2, respuesta: 'Los orangutanes', active: true },
-          { id: 3, respuesta: 'El cabassot', active: true }
-        ]
-      }
-    ],
-    respuestas: []
+    fecha: '',
+    titulo: '',
+    votosTotales: 0,
+    preguntas: []
   }
-  preguntaActual: Pregunta = this.consulta.preguntas[0];
+  respuestas: RespuestaUsuario[] = [];
 
   constructor(
-    private cookiesService: CookieService
+    private cookiesService: CookieService,
+    private consultasService: ConsultasService,
+    private respuestasUsuariosService: RespuestasUsuariosService,
+    private activatedRoute: ActivatedRoute,
+    private authService: AuthService
   ){}
 
-  cambiaPreguntaActual(indexPregunta: number) {
-    this.preguntaActual = this.consulta.preguntas[indexPregunta];
+  ngOnInit() {
+    this.getIdUsuario();
+    const consultaId = parseInt(this.activatedRoute.snapshot.paramMap.get('id')!);
+    this.consultasService.consultasIdGet(consultaId).subscribe({
+      next: (response: ResponseConsulta) => {
+        console.log(response);
+        if (response.status.status === 200) {
+          this.consulta = response.consulta;
+        }
+      },
+      error: (error) => {
+        console.error('Error al obtener la consulta -> ', error);
+      }
+    })
   }
 
-  guardaRespuesta(respuesta: Opcion) {
+  getIdUsuario() {
+    const decodedToken: any = jwtDecode(this.authService.getToken());
+    this.idUsuario = decodedToken.id;
+  }
+
+  guardaRespuesta(respuesta: OpcionRespuesta) {
     console.log('Guardando respuesta', respuesta);
-    let respuestaGuardada: Respuesta = {
-      pregunta: this.preguntaActual,
-      respuesta: respuesta
+    let respuestaUsuario: RespuestaUsuario = {
+      id: 0,
+      idAsociado: this.idUsuario,
+      idPregunta: respuesta.idPregunta,
+      idOpcionRespuesta: respuesta.id
     }
-    this.almacenarRespuesta(respuestaGuardada);
+    this.almacenarRespuesta(respuestaUsuario)
   }
 
-  almacenarRespuesta(respuestaGuardada: Respuesta) {
-    const indiceExistente = this.consulta.respuestas.findIndex(r => r.pregunta.id === respuestaGuardada.pregunta.id);
+  almacenarRespuesta(respuestaUsuario: RespuestaUsuario) {
+    const indiceExistente = this.respuestas.findIndex(r => r.idPregunta === respuestaUsuario.idPregunta);
     if (indiceExistente !== -1) {
-      this.consulta.respuestas.splice(indiceExistente, 1);
+      this.respuestas.splice(indiceExistente, 1);
     }
-    this.consulta.respuestas.push(respuestaGuardada);
-  }
-
-  onSlideChange(event: any) {
-    const slideIndex = event.detail[0].activeIndex;
-    const preguntaActual = this.consulta.preguntas[slideIndex];
-  
-    if (preguntaActual) { // Verifica que la pregunta exista para evitar errores.
-      this.cambiaPreguntaActual(slideIndex);
-      console.log('Pregunta actual -> ', this.preguntaActual.id);
-    } else {
-      console.error('No se encontró la pregunta para el slide actual');
-    }
+    this.respuestas.push(respuestaUsuario);
   }
 
   enviarRespuestas() {
-    console.log('Enviando respuestas -> ', this.consulta.respuestas);
-    // this.cookiesService.set('respuestas', JSON.stringify(this.consulta.respuestas));
+    console.log('Enviando respuestas -> ', this.respuestas);
+    const promesasDeEnvio = this.respuestas.map(respuesta => 
+      new Promise((resolve, reject) => {
+        this.respuestasUsuariosService.respuestasUsuariosPost(respuesta).subscribe({
+          next: (response: ResponseStatus) => {
+            console.log('Respuestas enviadas -> ', response);
+            resolve(response);
+          },
+          error: (error) => {
+            console.error('Error al enviar las respuestas -> ', error);
+            reject(error);
+          }
+        });
+      })
+    );
+  
+    Promise.all(promesasDeEnvio).then(() => {
+      this.redireccionar();
+    }).catch(error => {
+      console.error('Error en el envío de alguna respuesta', error);
+    });
+  }
+  
+  redireccionar() {
     if (Boolean(this.cookiesService.get('href'))) {
       window.location.href = this.cookiesService.get('href');
     } else {

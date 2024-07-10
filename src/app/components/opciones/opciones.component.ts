@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatRadioModule } from '@angular/material/radio';
-import { Opcion } from '../../models/opcion.model';
+import { OpcionRespuesta } from '../../../api';
 
 @Component({
   selector: 'app-opciones',
@@ -17,12 +17,12 @@ import { Opcion } from '../../models/opcion.model';
 export class OpcionesComponent {
 
   public respuesta = new FormControl('');
-  @Input() opciones: Opcion[] = [];
-  @Output() respuestaSeleccionada: EventEmitter<Opcion> = new EventEmitter<Opcion>();
+  @Input() opciones: OpcionRespuesta[] = [];
+  @Output() respuestaSeleccionada: EventEmitter<OpcionRespuesta> = new EventEmitter<OpcionRespuesta>();
 
   ngOnInit() {
-    this.respuesta.valueChanges.subscribe((value) => {
-      this.respuestaSeleccionada.emit(value as Opcion);
+    this.respuesta.valueChanges.subscribe((value: any) => {
+      this.respuestaSeleccionada.emit(value);
     });
   }
   

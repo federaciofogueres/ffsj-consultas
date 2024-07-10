@@ -2,7 +2,6 @@
     <swiper-container 
         slides-per-view="1"
         navigation
-        (swiperactiveindexchange)="onSlideChange($event)"
     >
         @for (pregunta of consulta.preguntas; track $index) {
             <swiper-slide>
@@ -12,7 +11,7 @@
                     ></app-pregunta>
                     <div class="mx-3 mt-3">
                         <app-opciones
-                            [opciones]="pregunta.opciones"
+                            [opciones]="pregunta.opcionesRespuestas"
                             (respuestaSeleccionada)="guardaRespuesta($event)"
                         ></app-opciones>
                     </div>
@@ -23,19 +22,9 @@
     <div class="d-flex justify-content-center mt-4">
         <button class="btn btn-primary" 
             (click)="enviarRespuestas()"
-            [disabled]="consulta.respuestas.length !== consulta.preguntas.length"
+            [disabled]="respuestas.length !== consulta.preguntas.length"
         >
             Enviar respuestas
         </button>
     </div>
 </div>
-
-<!-- <script>
-    const swiperEl = document.querySelector('.swiper-container');
-    swiperEl.addEventListener('swiperslidechanges', (event) => {
-        console.log('Evento swiperslidechanges', event);
-    });
-    swiperEl.addEventListener('swiperslidechange', (event) => {
-        console.log('Evento swiperslidechange', event);
-    });
-</script> -->
