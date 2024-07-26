@@ -3,6 +3,7 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
+import { AutorizacionesConsultasService } from './api/autorizacionesConsultas.service';
 import { ConsultasService } from './api/consultas.service';
 import { OpcionesRespuestasService } from './api/opcionesRespuestas.service';
 import { PreguntasService } from './api/preguntas.service';
@@ -13,6 +14,7 @@ import { RespuestasUsuariosService } from './api/respuestasUsuarios.service';
   declarations: [],
   exports:      [],
   providers: [
+    AutorizacionesConsultasService,
     ConsultasService,
     OpcionesRespuestasService,
     PreguntasService,

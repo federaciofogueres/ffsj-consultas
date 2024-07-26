@@ -10,9 +10,7 @@
  * Do not edit the class manually.
  */
 
-export interface RespuestaUsuario { 
-    id: number;
-    idAsociado?: number;
-    idPregunta: number;
-    idOpcionRespuesta: number;
+export interface Autorizacion { 
+    idConsulta: number;
+    idAsociado: number;
 }

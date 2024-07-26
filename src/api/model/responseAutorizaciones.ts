@@ -9,10 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { Autorizacion } from './autorizacion';
+import { Status } from './status';
 
-export interface RespuestaUsuario { 
-    id: number;
-    idAsociado?: number;
-    idPregunta: number;
-    idOpcionRespuesta: number;
+export interface ResponseAutorizaciones { 
+    autorizaciones: Array<Autorizacion>;
+    status: Status;
 }
