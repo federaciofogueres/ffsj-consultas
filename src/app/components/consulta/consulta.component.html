@@ -1,30 +1,36 @@
-<div class="container pt-4">
-    <swiper-container 
-        slides-per-view="1"
-        navigation
-    >
-        @for (pregunta of consulta.preguntas; track $index) {
-            <swiper-slide>
-                <div class="container">
-                    <app-pregunta
-                        [pregunta]="pregunta"
-                    ></app-pregunta>
-                    <div class="mx-3 mt-3">
-                        <app-opciones
-                            [opciones]="pregunta.opcionesRespuestas"
-                            (respuestaSeleccionada)="guardaRespuesta($event)"
-                        ></app-opciones>
-                    </div>
-                </div>
-            </swiper-slide>
-        }
-    </swiper-container>
-    <div class="d-flex justify-content-center mt-4">
-        <button class="btn btn-primary" 
-            (click)="enviarRespuestas()"
-            [disabled]="respuestas.length !== consulta.preguntas.length"
+@if (loading) {
+    <lib-ffsj-spinner
+        [fullscreen]="true"
+    ></lib-ffsj-spinner>
+} @else {
+    <div class="container pt-4">
+        <swiper-container 
+            slides-per-view="1"
+            navigation
         >
-            Enviar respuestas
-        </button>
+            @for (pregunta of consulta.preguntas; track $index) {
+                <swiper-slide>
+                    <div class="container">
+                        <app-pregunta
+                            [pregunta]="pregunta"
+                        ></app-pregunta>
+                        <div class="mx-3 mt-3">
+                            <app-opciones
+                                [opciones]="pregunta.opcionesRespuestas"
+                                (respuestaSeleccionada)="guardaRespuesta($event)"
+                            ></app-opciones>
+                        </div>
+                    </div>
+                </swiper-slide>
+            }
+        </swiper-container>
+        <div class="d-flex justify-content-center mt-4">
+            <button class="btn btn-primary" 
+                (click)="enviarRespuestas()"
+                [disabled]="respuestas.length !== consulta.preguntas.length"
+            >
+                Enviar respuestas
+            </button>
+        </div>
     </div>
-</div>
+}

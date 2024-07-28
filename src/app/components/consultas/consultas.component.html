@@ -1,3 +1,26 @@
-<p>
-    Consultas works!
-</p>
+@if (loading) {
+    <lib-ffsj-spinner
+        [fullscreen]="true"
+    ></lib-ffsj-spinner>
+} @else {
+    <div class="container">
+        <div class="d-flex flex-column gap-3">
+            <span>
+                Bienvendio y bievenida a la aplicación de consultas de la Federació de Les Fogueres de Sant Joan.
+            </span>
+            <span>
+                Por favor, selecciona una consulta para participar en ella.
+            </span>
+            <div class="d-flex flex-column gap-3">
+                @for (consulta of consultas; track $index) {
+                    <div class="card mb-3" (click)="loadConsulta(consulta)">
+                        <div class="card-body">
+                          <h5 class="card-title">{{ consulta.titulo }}</h5>
+                          <p class="card-text">{{ consulta.fecha }}</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}

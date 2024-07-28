@@ -1,6 +1,6 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AuthService } from 'ffsj-web-components';
+import { AuthService, FfsjSpinnerComponent } from 'ffsj-web-components';
 import { jwtDecode } from "jwt-decode";
 import { CookieService } from 'ngx-cookie-service';
 import { Consulta, ConsultasService, OpcionRespuesta, ResponseConsulta, ResponseStatus, RespuestasUsuariosService, RespuestaUsuario } from '../../../api';
@@ -12,13 +12,16 @@ import { PreguntaComponent } from '../pregunta/pregunta.component';
   standalone: true,
   imports: [
     OpcionesComponent,
-    PreguntaComponent
+    PreguntaComponent,
+    FfsjSpinnerComponent
   ],
   templateUrl: './consulta.component.html',
   styleUrl: './consulta.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ConsultaComponent {
+
+  loading: boolean = false;
 
   idUsuario: number = -1;
   consulta: Consulta = {
@@ -39,13 +42,17 @@ export class ConsultaComponent {
   ){}
 
   ngOnInit() {
+    this.loading = true;
     this.getIdUsuario();
     const consultaId = parseInt(this.activatedRoute.snapshot.paramMap.get('id')!);
     this.consultasService.consultasIdGet(consultaId).subscribe({
       next: (response: ResponseConsulta) => {
         console.log(response);
         if (response.status.status === 200) {
+          console.log(this.idUsuario);
+          
           this.consulta = response.consulta;
+          this.loading = false;
         }
       },
       error: (error) => {

@@ -1,15 +1,18 @@
 import * as i0 from '@angular/core';
-import { Component, Injectable, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Injectable, EventEmitter, Input, Output, Inject } from '@angular/core';
 import * as i1 from '@angular/common/http';
 import { HttpHeaders, HttpClientModule } from '@angular/common/http';
-import * as i2 from '@angular/forms';
+import * as i3 from '@angular/forms';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { Subject, BehaviorSubject } from 'rxjs';
 import * as i1$1 from '@angular/router';
 import * as CryptoJS from 'crypto-js';
 import * as bcrypt from 'bcryptjs';
 import * as i4 from 'ngx-cookie-service';
 import * as i1$2 from '@angular/common';
 import { CommonModule } from '@angular/common';
+import * as i1$3 from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 
 class FfsjWebComponentsComponent {
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjWebComponentsComponent, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
@@ -39,6 +42,65 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.11", ngImpo
                     providedIn: 'root'
                 }]
         }], ctorParameters: () => [] });
+
+var AlertType;
+(function (AlertType) {
+    AlertType["Success"] = "success";
+    AlertType["Danger"] = "danger";
+    AlertType["Warning"] = "warning";
+    AlertType["Info"] = "info";
+})(AlertType || (AlertType = {}));
+
+class FfsjAlertService {
+    constructor() {
+        this.alert$ = new Subject();
+    }
+    success(message, duration = 5000) {
+        this.alert$.next({ type: AlertType.Success, message: message, duration: duration });
+    }
+    danger(message, duration = 5000) {
+        this.alert$.next({ type: AlertType.Danger, message: message, duration: duration });
+    }
+    warning(message, duration = 5000) {
+        this.alert$.next({ type: AlertType.Warning, message: message, duration: duration });
+    }
+    info(message, duration = 5000) {
+        this.alert$.next({ type: AlertType.Info, message: message, duration: duration });
+    }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjAlertService, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjAlertService, providedIn: 'root' }); }
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjAlertService, decorators: [{
+            type: Injectable,
+            args: [{
+                    providedIn: 'root'
+                }]
+        }] });
+
+class FfsjAlertComponent {
+    constructor(ffsjAlertService) {
+        this.ffsjAlertService = ffsjAlertService;
+    }
+    ngOnInit() {
+        this.subscription = this.ffsjAlertService.alert$.subscribe(alert => {
+            this.message = alert.message;
+            this.type = alert.type;
+            setTimeout(() => this.closeAlert(), alert.duration);
+        });
+    }
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
+    closeAlert() {
+        this.message = null;
+    }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjAlertComponent, deps: [{ token: FfsjAlertService }], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "17.3.11", type: FfsjAlertComponent, isStandalone: true, selector: "lib-ffsj-alert", ngImport: i0, template: "@if (message) {\r\n    <div class=\"alert alert-{{type}}\" role=\"alert\">\r\n        {{message}}\r\n        <button type=\"button\" class=\"close\" (click)=\"closeAlert()\">\r\n          <span aria-hidden=\"true\">&times;</span>\r\n        </button>\r\n    </div>\r\n}", styles: [".alert{display:flex;align-items:center;justify-content:space-between;position:absolute;top:0;right:0;padding:10px}.close{font-size:1.5rem;font-weight:700;background:transparent;border:0}.close:hover{color:#000;text-decoration:none}.close:not(:disabled):not(.disabled):hover,.close:not(:disabled):not(.disabled):focus{opacity:.75}\n"] }); }
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjAlertComponent, decorators: [{
+            type: Component,
+            args: [{ selector: 'lib-ffsj-alert', standalone: true, imports: [], template: "@if (message) {\r\n    <div class=\"alert alert-{{type}}\" role=\"alert\">\r\n        {{message}}\r\n        <button type=\"button\" class=\"close\" (click)=\"closeAlert()\">\r\n          <span aria-hidden=\"true\">&times;</span>\r\n        </button>\r\n    </div>\r\n}", styles: [".alert{display:flex;align-items:center;justify-content:space-between;position:absolute;top:0;right:0;padding:10px}.close{font-size:1.5rem;font-weight:700;background:transparent;border:0}.close:hover{color:#000;text-decoration:none}.close:not(:disabled):not(.disabled):hover,.close:not(:disabled):not(.disabled):focus{opacity:.75}\n"] }]
+        }], ctorParameters: () => [{ type: FfsjAlertService }] });
 
 class Configuration {
     constructor(configurationParameters = {}) {
@@ -154,6 +216,74 @@ class CensoService {
             reportProgress: reportProgress
         });
     }
+    asociadosGetById(asociado, observe = 'body', reportProgress = false) {
+        if (asociado === null || asociado === undefined) {
+            throw new Error('Required parameter asociado was null or undefined when calling asociadosGetById.');
+        }
+        let headers = this.defaultHeaders;
+        // authentication (BearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+        // to determine the Content-Type header
+        const consumes = [];
+        return this.httpClient.request('get', `${this.basePath}/asociados/${encodeURIComponent(String(asociado))}`, {
+            withCredentials: this.configuration.withCredentials,
+            headers: headers,
+            observe: observe,
+            reportProgress: reportProgress
+        });
+    }
+    asociadosPut(body, asociado, observe = 'body', reportProgress = false) {
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling asociadosPut.');
+        }
+        if (asociado === null || asociado === undefined) {
+            throw new Error('Required parameter asociado was null or undefined when calling asociadosPut.');
+        }
+        let headers = this.defaultHeaders;
+        // authentication (BearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+        // to determine the Content-Type header
+        const consumes = [
+            'application/json'
+        ];
+        const httpContentTypeSelected = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+        return this.httpClient.request('put', `${this.basePath}/asociados/${encodeURIComponent(String(asociado))}`, {
+            body: body,
+            withCredentials: this.configuration.withCredentials,
+            headers: headers,
+            observe: observe,
+            reportProgress: reportProgress
+        });
+    }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: CensoService, deps: [{ token: i1.HttpClient }], target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: CensoService, providedIn: 'root' }); }
 }
@@ -206,16 +336,31 @@ class AuthService {
         this.censoService = censoService;
         this.encoderService = encoderService;
         this.cookieService = cookieService;
+        this.loginStatus$ = new BehaviorSubject(false);
+        this.loginStatusObservable = this.loginStatus$.asObservable();
     }
     checkToken() {
         return !this.checkExpireDateToken(this.encoderService.decrypt(this.cookieService.get('token')));
     }
     checkExpireDateToken(token) {
+        if (token === '' || token === null) {
+            return true;
+        }
         const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
         return (Math.floor((new Date).getTime() / 1000)) >= expiry;
     }
+    isLocalDomain() {
+        return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    }
     saveToken(token) {
-        this.cookieService.set('token', this.encoderService.encrypt(token));
+        const isLocal = this.isLocalDomain();
+        const hostName = isLocal ? undefined : '.hogueras.es';
+        const options = {
+            domain: hostName,
+            path: '/',
+            secure: !isLocal // Assuming secure cookies should not be set for localhost
+        };
+        this.cookieService.set('token', this.encoderService.encrypt(token), options);
     }
     async login(user, password) {
         let usuario = {
@@ -225,13 +370,26 @@ class AuthService {
         return new Promise(async (resolve, reject) => {
             this.censoService.doLogin(usuario).subscribe({
                 next: (res) => {
+                    if (res.solicitud) {
+                        console.log('Cambiar password');
+                        this.censoService.configuration.accessToken = res.solicitud.token;
+                        // this.saveToken(res.solicitud.token!);
+                        resolve({ code: 201, id: res.solicitud.id });
+                    }
+                    else {
+                        console.log(res);
+                        this.saveToken(res.token);
+                        resolve({ code: 200 });
+                    }
                     console.log(res);
                     this.saveToken(res.token);
-                    resolve(true);
+                    this.loginStatus$.next(true);
+                    resolve(res);
                 },
-                error: error => {
+                error: (error) => {
                     console.log(error);
-                    reject(error);
+                    this.loginStatus$.next(false);
+                    reject({ code: 400 });
                 }
             });
         });
@@ -240,16 +398,72 @@ class AuthService {
         let token = '';
         if (this.cookieService.get('token')) {
             token = this.encoderService.decrypt(this.cookieService.get('token'));
+            this.loginStatus$.next(true);
         }
         return token;
+    }
+    getIdUsuario() {
+        const token = this.getToken();
+        if (token === '' || token === null) {
+            return -1;
+        }
+        return (JSON.parse(atob(token.split('.')[1]))).id;
     }
     logout() {
         this.cookieService.delete('token');
         this.router.navigateByUrl('login');
+        this.loginStatus$.next(false);
     }
     isLoggedIn() {
         const token = this.cookieService.get('token');
-        return token !== null && token !== '' ? this.checkToken() : false;
+        const isLoggedIn = token !== null && token !== '' ? this.checkToken() : false;
+        this.loginStatus$.next(isLoggedIn);
+        return isLoggedIn;
+    }
+    getCargos() {
+        try {
+            // Suponiendo que token es la cadena que quieres decodificar
+            const token = this.cookieService.get('token');
+            if (!token) {
+                throw new Error('Token no encontrado');
+            }
+            // Asegúrate de que la cadena esté correctamente codificada en base64 antes de decodificarla
+            const tokenDecoded = this.encoderService.decrypt(token);
+            const base64Payload = tokenDecoded.split('.')[1]; // Asumiendo JWT. Ajusta según sea necesario.
+            const payload = atob(base64Payload);
+            // Procesa el payload como necesites
+            return JSON.parse(payload).cargos; // Ajusta según la estructura de tus datos
+        }
+        catch (error) {
+            // console.log('Error al decodificar la cadena base64:', error);
+            // Retorna un valor de respaldo o maneja el error como consideres apropiado
+            return [];
+        }
+    }
+    updatePassword(asociado, password) {
+        return new Promise((resolve, reject) => {
+            this.censoService.asociadosGetById(asociado).subscribe({
+                next: (res) => {
+                    console.log(res);
+                    let usuario = res.asociados[0];
+                    usuario.password = this.encoderService.encrypt(password);
+                    this.censoService.asociadosPut(usuario, usuario.id).subscribe({
+                        next: (res) => {
+                            console.log(res);
+                            resolve(res); // Resuelve la promesa si la actualización es correcta
+                        },
+                        error: (error) => {
+                            console.log(error);
+                            reject(error); // Rechaza la promesa si hay un error en la actualización
+                        }
+                    });
+                },
+                error: (error) => {
+                    console.log(error);
+                    reject(error); // Rechaza la promesa si hay un error al obtener el usuario
+                }
+            });
+        });
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: AuthService, deps: [{ token: i1$1.Router }, { token: CensoService }, { token: EncoderService }, { token: i4.CookieService }], target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: AuthService, providedIn: 'root' }); }
@@ -262,48 +476,83 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.11", ngImpo
         }], ctorParameters: () => [{ type: i1$1.Router }, { type: CensoService }, { type: EncoderService }, { type: i4.CookieService }] });
 
 class FfsjLoginComponent {
-    constructor(authService) {
+    constructor(authService, alertService) {
         this.authService = authService;
+        this.alertService = alertService;
         this.title = 'Iniciar Sesión';
         this.subtitle = 'Acceso a administración';
         this.logStatus = new EventEmitter();
-        this.username = new FormControl('');
+        this.username = new FormControl({ value: '', disabled: false });
         this.password = new FormControl('');
+        this.repeatPassword = new FormControl('');
         this.loading = false;
+        this.showChangePasswordForm = false;
+        this.idAsociadoToChangePassword = -1;
     }
-    // ngOnInit() {
-    //   if (this.authService.isLoggedIn()) {
-    //     this.route.navigateByUrl('home');
-    //   }
-    // }
+    ngOnInit() {
+        if (this.authService.isLoggedIn()) {
+            this.logStatus.emit(true);
+        }
+    }
     async login() {
         console.log('Doing Login -> ', this.username.value, this.password.value);
         this.loading = true;
         if (this.username.valid && this.password.valid) {
-            this.authService.login(this.username.value, this.password.value)
-                .then((res) => {
+            console.log(`Username: ${this.username.value} - password: ${this.password.value}`);
+            const codeLogin = await this.authService.login(this.username.value, this.password.value);
+            if (codeLogin.code === 200) {
                 this.loading = false;
-                console.log(res);
-                console.log('Login success');
+                // this.alertService.success('Bienvenido!', 5000)
                 this.logStatus.emit(true);
-            })
-                .catch(() => {
+            }
+            else if (codeLogin.code === 400) {
                 this.loading = false;
-                console.log('Login failed');
+                // this.alertService.danger('Datos incorrectos de inicio de sesión.', 5000)
                 this.logStatus.emit(false);
-            });
+            }
+            else if (codeLogin.code === 201) {
+                this.idAsociadoToChangePassword = codeLogin.id;
+                this.showChangePasswordForm = true;
+                this.username.disable();
+                this.password.reset();
+                this.loading = false;
+            }
+        }
+        else {
+            this.loading = false;
+            this.alertService.danger('Datos incorrectos de inicio de sesión.', 5000);
+            this.logStatus.emit(false);
         }
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjLoginComponent, deps: [{ token: AuthService }], target: i0.ɵɵFactoryTarget.Component }); }
-    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.11", type: FfsjLoginComponent, isStandalone: true, selector: "lib-ffsj-login", inputs: { title: "title", subtitle: "subtitle" }, outputs: { logStatus: "logStatus" }, ngImport: i0, template: "<div>\r\n    <div class=\"container mt-4 login-container\">\r\n    \r\n        <div class=\"row banner\">\r\n        <h1>\r\n            <img src=\"https://intranet.hogueras.es/wp-content/uploads/2016/12/logofede.png\" class=\"img-fluid\" alt=\"\">\r\n            <span style=\"color: #dd5a43 !important\">{{title}}</span>\r\n        </h1>\r\n        <h4 style=\"color: #478fca !important; text-align: center;\">\u00A9 Federaci\u00F3 de Les Fogueres de Sant Joan</h4>\r\n        </div>\r\n    \r\n        <div class=\"row\">\r\n        <h4 class=\"titulo-consultas\" style=\"color: #478fca !important;\">\r\n            {{subtitle}}\r\n        </h4>\r\n        </div>\r\n        <div class=\"row my-3\">\r\n        <label for=\"username\">Usuario</label>\r\n        <input type=\"text\" id=\"username\" class=\"form-control\" [formControl]=\"username\" value=\"\">\r\n        </div>\r\n        <div class=\"row mb-3\">\r\n        <label for=\"username\">Contrase\u00F1a</label>\r\n        <input type=\"password\" id=\"password\" class=\"form-control\" [formControl]=\"password\" value=\"\">\r\n        </div>\r\n        <div class=\"row submit-button mt-2\">\r\n        <button (click)=\"login()\">Iniciar sesi\u00F3n</button>\r\n        </div>\r\n    \r\n    </div>\r\n</div>", styles: [".login-container{max-width:350px}.login-container .row.banner{text-align:center}.login-container .row.banner img{max-height:75px}.submit-button button{margin:auto;color:#fff;background-color:#0033a0;border:1px solid #0033A0;font-weight:700;padding:10px 20px;border-radius:25px;width:auto;max-width:80%}.row.banner{text-align:center}.row.banner img{max-height:75px}\n"], dependencies: [{ kind: "ngmodule", type: ReactiveFormsModule }, { kind: "directive", type: i2.DefaultValueAccessor, selector: "input:not([type=checkbox])[formControlName],textarea[formControlName],input:not([type=checkbox])[formControl],textarea[formControl],input:not([type=checkbox])[ngModel],textarea[ngModel],[ngDefaultControl]" }, { kind: "directive", type: i2.NgControlStatus, selector: "[formControlName],[ngModel],[formControl]" }, { kind: "directive", type: i2.FormControlDirective, selector: "[formControl]", inputs: ["formControl", "disabled", "ngModel"], outputs: ["ngModelChange"], exportAs: ["ngForm"] }, { kind: "ngmodule", type: HttpClientModule }] }); }
+    changePassword() {
+        if (this.password.value !== this.repeatPassword.value) {
+            this.alertService.danger('Las contraseñas no coinciden.', 5000);
+            return;
+        }
+        this.authService.updatePassword(this.idAsociadoToChangePassword, this.password.value)
+            .then((res) => {
+            console.log(res);
+            // this.alertService.success('Contraseña actualizada correctamente.', 5000);
+            this.showChangePasswordForm = false;
+            this.username.enable();
+            this.login();
+        })
+            .catch((error) => {
+            console.log(error);
+            // this.alertService.danger('Error al actualizar la contraseña.', 5000);
+        });
+    }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjLoginComponent, deps: [{ token: AuthService }, { token: FfsjAlertService }], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "17.3.11", type: FfsjLoginComponent, isStandalone: true, selector: "lib-ffsj-login", inputs: { title: "title", subtitle: "subtitle" }, outputs: { logStatus: "logStatus" }, ngImport: i0, template: "\r\n    <div class=\"container mt-4 login-container\">\r\n  \r\n      <div class=\"row banner\">\r\n        <h1>\r\n          <img src=\"https://intranet.hogueras.es/wp-content/uploads/2016/12/logofede.png\" class=\"img-fluid\" alt=\"\">\r\n          <span style=\"color: #dd5a43 !important\">{{title}}</span>\r\n        </h1>\r\n        <h4 style=\"color: #478fca !important; text-align: center;\">\u00A9 Federaci\u00F3 de Les Fogueres de Sant Joan</h4>\r\n      </div>\r\n  \r\n      <div class=\"row\">\r\n        <h4 class=\"titulo-consultas\" style=\"color: #478fca !important;\">\r\n          {{subtitle}}\r\n        </h4>\r\n      </div>\r\n      <div class=\"row my-3\">\r\n        <label for=\"username\">Usuario</label>\r\n        <input type=\"text\" id=\"username\" class=\"form-control\" [formControl]=\"username\" value=\"\">\r\n      </div>\r\n      @if (showChangePasswordForm) {\r\n        <div class=\"row mb-3\">\r\n          <label for=\"password\">Nueva contrase\u00F1a</label>\r\n        <input type=\"password\" id=\"password\" class=\"form-control\" [formControl]=\"password\" value=\"\">\r\n        </div>\r\n        <div class=\"row mb-3\">\r\n          <label for=\"repeatPassword\">Repite la nueva contrase\u00F1a</label>\r\n          <input type=\"password\" id=\"repeatPassword\" class=\"form-control\" [formControl]=\"repeatPassword\" value=\"\">\r\n        </div>\r\n      } @else {\r\n        <div class=\"row mb-3\">\r\n            <label for=\"password\">Contrase\u00F1a</label>\r\n          <input type=\"password\" id=\"password\" class=\"form-control\" [formControl]=\"password\" value=\"\">\r\n        </div>\r\n      }\r\n      @if(showChangePasswordForm) {\r\n        <div class=\"row submit-button mt-2\">\r\n          <button (click)=\"changePassword()\">Actualizar contrase\u00F1a</button>\r\n        </div>\r\n      } @else {\r\n        <div class=\"row submit-button mt-2\">\r\n          <button (click)=\"login()\">Iniciar sesi\u00F3n</button>\r\n        </div>\r\n      }\r\n  \r\n    </div>\r\n\r\n    <lib-ffsj-alert></lib-ffsj-alert>", styles: [".login-container{max-width:350px}.login-container .row.banner{text-align:center}.login-container .row.banner img{max-height:75px}.submit-button button{margin:auto;color:#fff;background-color:#0033a0;border:1px solid #0033A0;font-weight:700;padding:10px 20px;border-radius:25px;width:auto;max-width:80%}.row.banner{text-align:center}.row.banner img{max-height:75px}\n"], dependencies: [{ kind: "ngmodule", type: ReactiveFormsModule }, { kind: "directive", type: i3.DefaultValueAccessor, selector: "input:not([type=checkbox])[formControlName],textarea[formControlName],input:not([type=checkbox])[formControl],textarea[formControl],input:not([type=checkbox])[ngModel],textarea[ngModel],[ngDefaultControl]" }, { kind: "directive", type: i3.NgControlStatus, selector: "[formControlName],[ngModel],[formControl]" }, { kind: "directive", type: i3.FormControlDirective, selector: "[formControl]", inputs: ["formControl", "disabled", "ngModel"], outputs: ["ngModelChange"], exportAs: ["ngForm"] }, { kind: "ngmodule", type: HttpClientModule }, { kind: "component", type: FfsjAlertComponent, selector: "lib-ffsj-alert" }] }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjLoginComponent, decorators: [{
             type: Component,
             args: [{ selector: 'lib-ffsj-login', standalone: true, imports: [
                         ReactiveFormsModule,
-                        HttpClientModule
-                    ], template: "<div>\r\n    <div class=\"container mt-4 login-container\">\r\n    \r\n        <div class=\"row banner\">\r\n        <h1>\r\n            <img src=\"https://intranet.hogueras.es/wp-content/uploads/2016/12/logofede.png\" class=\"img-fluid\" alt=\"\">\r\n            <span style=\"color: #dd5a43 !important\">{{title}}</span>\r\n        </h1>\r\n        <h4 style=\"color: #478fca !important; text-align: center;\">\u00A9 Federaci\u00F3 de Les Fogueres de Sant Joan</h4>\r\n        </div>\r\n    \r\n        <div class=\"row\">\r\n        <h4 class=\"titulo-consultas\" style=\"color: #478fca !important;\">\r\n            {{subtitle}}\r\n        </h4>\r\n        </div>\r\n        <div class=\"row my-3\">\r\n        <label for=\"username\">Usuario</label>\r\n        <input type=\"text\" id=\"username\" class=\"form-control\" [formControl]=\"username\" value=\"\">\r\n        </div>\r\n        <div class=\"row mb-3\">\r\n        <label for=\"username\">Contrase\u00F1a</label>\r\n        <input type=\"password\" id=\"password\" class=\"form-control\" [formControl]=\"password\" value=\"\">\r\n        </div>\r\n        <div class=\"row submit-button mt-2\">\r\n        <button (click)=\"login()\">Iniciar sesi\u00F3n</button>\r\n        </div>\r\n    \r\n    </div>\r\n</div>", styles: [".login-container{max-width:350px}.login-container .row.banner{text-align:center}.login-container .row.banner img{max-height:75px}.submit-button button{margin:auto;color:#fff;background-color:#0033a0;border:1px solid #0033A0;font-weight:700;padding:10px 20px;border-radius:25px;width:auto;max-width:80%}.row.banner{text-align:center}.row.banner img{max-height:75px}\n"] }]
-        }], ctorParameters: () => [{ type: AuthService }], propDecorators: { title: [{
+                        HttpClientModule,
+                        FfsjAlertComponent
+                    ], template: "\r\n    <div class=\"container mt-4 login-container\">\r\n  \r\n      <div class=\"row banner\">\r\n        <h1>\r\n          <img src=\"https://intranet.hogueras.es/wp-content/uploads/2016/12/logofede.png\" class=\"img-fluid\" alt=\"\">\r\n          <span style=\"color: #dd5a43 !important\">{{title}}</span>\r\n        </h1>\r\n        <h4 style=\"color: #478fca !important; text-align: center;\">\u00A9 Federaci\u00F3 de Les Fogueres de Sant Joan</h4>\r\n      </div>\r\n  \r\n      <div class=\"row\">\r\n        <h4 class=\"titulo-consultas\" style=\"color: #478fca !important;\">\r\n          {{subtitle}}\r\n        </h4>\r\n      </div>\r\n      <div class=\"row my-3\">\r\n        <label for=\"username\">Usuario</label>\r\n        <input type=\"text\" id=\"username\" class=\"form-control\" [formControl]=\"username\" value=\"\">\r\n      </div>\r\n      @if (showChangePasswordForm) {\r\n        <div class=\"row mb-3\">\r\n          <label for=\"password\">Nueva contrase\u00F1a</label>\r\n        <input type=\"password\" id=\"password\" class=\"form-control\" [formControl]=\"password\" value=\"\">\r\n        </div>\r\n        <div class=\"row mb-3\">\r\n          <label for=\"repeatPassword\">Repite la nueva contrase\u00F1a</label>\r\n          <input type=\"password\" id=\"repeatPassword\" class=\"form-control\" [formControl]=\"repeatPassword\" value=\"\">\r\n        </div>\r\n      } @else {\r\n        <div class=\"row mb-3\">\r\n            <label for=\"password\">Contrase\u00F1a</label>\r\n          <input type=\"password\" id=\"password\" class=\"form-control\" [formControl]=\"password\" value=\"\">\r\n        </div>\r\n      }\r\n      @if(showChangePasswordForm) {\r\n        <div class=\"row submit-button mt-2\">\r\n          <button (click)=\"changePassword()\">Actualizar contrase\u00F1a</button>\r\n        </div>\r\n      } @else {\r\n        <div class=\"row submit-button mt-2\">\r\n          <button (click)=\"login()\">Iniciar sesi\u00F3n</button>\r\n        </div>\r\n      }\r\n  \r\n    </div>\r\n\r\n    <lib-ffsj-alert></lib-ffsj-alert>", styles: [".login-container{max-width:350px}.login-container .row.banner{text-align:center}.login-container .row.banner img{max-height:75px}.submit-button button{margin:auto;color:#fff;background-color:#0033a0;border:1px solid #0033A0;font-weight:700;padding:10px 20px;border-radius:25px;width:auto;max-width:80%}.row.banner{text-align:center}.row.banner img{max-height:75px}\n"] }]
+        }], ctorParameters: () => [{ type: AuthService }, { type: FfsjAlertService }], propDecorators: { title: [{
                 type: Input
             }], subtitle: [{
                 type: Input
@@ -353,6 +602,50 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.11", ngImpo
                 type: Input
             }] } });
 
+var AlertButtonType;
+(function (AlertButtonType) {
+    AlertButtonType["Aceptar"] = "Aceptar";
+    AlertButtonType["Cancelar"] = "Cancelar";
+    AlertButtonType["Entendido"] = "Entendido";
+})(AlertButtonType || (AlertButtonType = {}));
+
+class FfsjDialogAlertComponent {
+    constructor(dialogSelfRef, data) {
+        this.dialogSelfRef = dialogSelfRef;
+        this.data = data;
+    }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjDialogAlertComponent, deps: [{ token: i1$3.MatDialogRef }, { token: MAT_DIALOG_DATA }], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "17.3.11", type: FfsjDialogAlertComponent, isStandalone: true, selector: "lib-ffsj-dialog-alert", ngImport: i0, template: "<h2 mat-dialog-title>{{ data.title }}</h2>\r\n<mat-dialog-content>\r\n  {{ data.content }}\r\n</mat-dialog-content>\r\n<mat-dialog-actions>\r\n  @for (button of data.buttonsAlert; track $index) {\r\n    <button mat-button (click)=\"dialogSelfRef.close(button)\">{{ button }}</button>\r\n  }\r\n</mat-dialog-actions>\r\n", styles: [""], dependencies: [{ kind: "ngmodule", type: MatDialogModule }, { kind: "directive", type: i1$3.MatDialogTitle, selector: "[mat-dialog-title], [matDialogTitle]", inputs: ["id"], exportAs: ["matDialogTitle"] }, { kind: "directive", type: i1$3.MatDialogActions, selector: "[mat-dialog-actions], mat-dialog-actions, [matDialogActions]", inputs: ["align"] }, { kind: "directive", type: i1$3.MatDialogContent, selector: "[mat-dialog-content], mat-dialog-content, [matDialogContent]" }] }); }
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjDialogAlertComponent, decorators: [{
+            type: Component,
+            args: [{ selector: 'lib-ffsj-dialog-alert', standalone: true, imports: [MatDialogModule], template: "<h2 mat-dialog-title>{{ data.title }}</h2>\r\n<mat-dialog-content>\r\n  {{ data.content }}\r\n</mat-dialog-content>\r\n<mat-dialog-actions>\r\n  @for (button of data.buttonsAlert; track $index) {\r\n    <button mat-button (click)=\"dialogSelfRef.close(button)\">{{ button }}</button>\r\n  }\r\n</mat-dialog-actions>\r\n" }]
+        }], ctorParameters: () => [{ type: i1$3.MatDialogRef }, { type: undefined, decorators: [{
+                    type: Inject,
+                    args: [MAT_DIALOG_DATA]
+                }] }] });
+
+class FfsjDialogAlertService {
+    constructor(dialog) {
+        this.dialog = dialog;
+    }
+    openDialogAlert(data) {
+        const dialogRef = this.dialog.open(FfsjDialogAlertComponent, {
+            data: data,
+            width: '600px',
+        });
+        return dialogRef;
+    }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjDialogAlertService, deps: [{ token: i1$3.MatDialog }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjDialogAlertService, providedIn: 'root' }); }
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjDialogAlertService, decorators: [{
+            type: Injectable,
+            args: [{
+                    providedIn: 'root'
+                }]
+        }], ctorParameters: () => [{ type: i1$3.MatDialog }] });
+
 /*
  * Public API Surface of ffsj-web-components
  */
@@ -361,5 +654,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.11", ngImpo
  * Generated bundle index. Do not edit.
  */
 
-export { AuthGuard, AuthService, FfsjLoginComponent, FfsjSpinnerComponent, FfsjWebComponentsComponent, FfsjWebComponentsService };
+export { AlertButtonType, AlertType, AuthGuard, AuthService, EncoderService, FfsjAlertComponent, FfsjAlertService, FfsjDialogAlertComponent, FfsjDialogAlertService, FfsjLoginComponent, FfsjSpinnerComponent, FfsjWebComponentsComponent, FfsjWebComponentsService };
 //# sourceMappingURL=ffsj-web-components.mjs.map
