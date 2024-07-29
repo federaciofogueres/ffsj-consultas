@@ -140,6 +140,8 @@ export class ConsultaComponent {
       window.location.href = this.cookiesService.get('href');
     } else {
       console.log('No se ha encontrado la URL de redirección');
+      this.ffsjAlertService.info('Respuesta guardada correctamente. No se ha encontrado la URL de redirección.');
+      window.location.href = this.cookiesService.get('https://consultas.hogueras.es');
     }
   }
 
