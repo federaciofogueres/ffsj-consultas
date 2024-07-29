@@ -1,9 +1,9 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { AuthService, FfsjSpinnerComponent } from 'ffsj-web-components';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService, FfsjAlertService, FfsjSpinnerComponent } from 'ffsj-web-components';
 import { jwtDecode } from "jwt-decode";
 import { CookieService } from 'ngx-cookie-service';
-import { Consulta, ConsultasService, OpcionRespuesta, ResponseConsulta, ResponseStatus, RespuestasUsuariosService, RespuestaUsuario } from '../../../api';
+import { AutorizacionesConsultasService, Consulta, ConsultasService, OpcionRespuesta, ResponseConsulta, ResponseStatus, RespuestasUsuariosService, RespuestaUsuario } from '../../../api';
 import { OpcionesComponent } from '../opciones/opciones.component';
 import { PreguntaComponent } from '../pregunta/pregunta.component';
 
@@ -38,13 +38,35 @@ export class ConsultaComponent {
     private cookiesService: CookieService,
     private respuestasUsuariosService: RespuestasUsuariosService,
     private activatedRoute: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private ffsjAlertService: FfsjAlertService,
+    private autorizacionesConsultasService: AutorizacionesConsultasService,
+    private router: Router
   ){}
 
   ngOnInit() {
     this.loading = true;
     this.getIdUsuario();
     const consultaId = parseInt(this.activatedRoute.snapshot.paramMap.get('id')!);
+    this.checkUserAuthorization(consultaId);
+  }
+
+  checkUserAuthorization(consultaId: number) {
+    this.autorizacionesConsultasService.consultasIdConsultaAutorizadosIdAsociadoGet(consultaId, this.idUsuario).subscribe({
+      next: (response: any) => {
+        if (response.status.status !== 200 || response.autorizaciones === 0) {
+          this.ffsjAlertService.danger('No tienes permisos para ver esta consulta');
+          this.router.navigateByUrl('/consultas');
+        }
+        this.loadConsultaInfo(consultaId);
+      },
+      error: (error) => {
+        console.error('Error al obtener la consulta -> ', error);
+      }
+    });
+  }
+
+  loadConsultaInfo(consultaId: number) {
     this.consultasService.consultasIdGet(consultaId).subscribe({
       next: (response: ResponseConsulta) => {
         console.log(response);
@@ -86,6 +108,7 @@ export class ConsultaComponent {
   }
 
   enviarRespuestas() {
+    this.loading = true;
     console.log('Enviando respuestas -> ', this.respuestas);
     const promesasDeEnvio = this.respuestas.map(respuesta => 
       new Promise((resolve, reject) => {
@@ -103,9 +126,12 @@ export class ConsultaComponent {
     );
   
     Promise.all(promesasDeEnvio).then(() => {
+      this.ffsjAlertService.success('Respuestas enviadas correctamente');
       this.redireccionar();
     }).catch(error => {
       console.error('Error en el envío de alguna respuesta', error);
+      this.ffsjAlertService.danger(error.error);
+
     });
   }
   
