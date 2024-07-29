@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { FfsjAlertComponent } from 'ffsj-web-components';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 
@@ -9,7 +10,8 @@ import { HeaderComponent } from './components/header/header.component';
   imports: [
     RouterOutlet,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    FfsjAlertComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
