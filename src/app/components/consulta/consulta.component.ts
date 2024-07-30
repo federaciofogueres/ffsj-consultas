@@ -74,6 +74,9 @@ export class ConsultaComponent {
           console.log(this.idUsuario);
           
           this.consulta = response.consulta;
+          this.consulta.preguntas.forEach(pregunta => {
+            pregunta.opcionesRespuestas.sort((a, b) => a.respuesta.localeCompare(b.respuesta));
+          });
           this.loading = false;
         }
       },
