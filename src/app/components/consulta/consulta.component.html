@@ -4,26 +4,28 @@
     ></lib-ffsj-spinner>
 } @else {
     <div class="container pt-4">
-        <swiper-container 
-            slides-per-view="1"
-            navigation
-        >
-            @for (pregunta of consulta.preguntas; track $index) {
-                <swiper-slide>
-                    <div class="container">
-                        <app-pregunta
-                            [pregunta]="pregunta"
-                        ></app-pregunta>
-                        <div class="mx-3 mt-3">
-                            <app-opciones
-                                [opciones]="pregunta.opcionesRespuestas"
-                                (respuestaSeleccionada)="guardaRespuesta($event)"
-                            ></app-opciones>
+        <div class="container-swipper">
+            <swiper-container 
+                slides-per-view="1"
+                navigation
+            >
+                @for (pregunta of consulta.preguntas; track $index) {
+                    <swiper-slide>
+                        <div class="container">
+                            <app-pregunta
+                                [pregunta]="pregunta"
+                            ></app-pregunta>
+                            <div class="mx-3 mt-3">
+                                <app-opciones
+                                    [opciones]="pregunta.opcionesRespuestas"
+                                    (respuestaSeleccionada)="guardaRespuesta($event)"
+                                ></app-opciones>
+                            </div>
                         </div>
-                    </div>
-                </swiper-slide>
-            }
-        </swiper-container>
+                    </swiper-slide>
+                }
+            </swiper-container>
+        </div>
         <div class="d-flex justify-content-center mt-4">
             <button class="btn btn-primary" 
                 (click)="enviarRespuestas()"

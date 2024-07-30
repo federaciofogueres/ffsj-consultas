@@ -2,3 +2,9 @@ swiper-container{
     // height: calc(100vh - 1.5rem);
     --swiper-navigation-top-offset: 86%;
 }
+
+.container-swipper{
+    height: calc(100vh - 15rem);
+    overflow-y: auto;
+
+}
