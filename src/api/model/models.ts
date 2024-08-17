@@ -13,4 +13,7 @@ export * from './responsePreguntas';
 export * from './responseRespuestaUsuario';
 export * from './responseStatus';
 export * from './respuestaUsuario';
+export * from './resultadoConsulta';
+export * from './resultadoOpcion';
+export * from './resultadoPregunta';
 export * from './status';

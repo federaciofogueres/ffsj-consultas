@@ -24,6 +24,7 @@ import { Consulta } from '../model/consulta';
 import { ResponseConsulta } from '../model/responseConsulta';
 import { ResponseConsultas } from '../model/responseConsultas';
 import { ResponseStatus } from '../model/responseStatus';
+import { ResultadoConsulta } from '../model/resultadoConsulta';
 
 import { Configuration } from '../configuration';
 import { BASE_PATH } from '../variables';
@@ -251,6 +252,54 @@ export class ConsultasService {
         return this.httpClient.request<ResponseStatus>('put',`${this.basePath}/consultas/${encodeURIComponent(String(id))}`,
             {
                 body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Obtener resultados de una consulta por ID de consulta
+     * 
+     * @param id 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public consultasIdResultadosGet(id: number, observe?: 'body', reportProgress?: boolean): Observable<ResultadoConsulta>;
+    public consultasIdResultadosGet(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ResultadoConsulta>>;
+    public consultasIdResultadosGet(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ResultadoConsulta>>;
+    public consultasIdResultadosGet(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling consultasIdResultadosGet.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<ResultadoConsulta>('get',`${this.basePath}/consultas/${encodeURIComponent(String(id))}/resultados`,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

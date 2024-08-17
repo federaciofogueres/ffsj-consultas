@@ -113,21 +113,21 @@ export class AutorizacionesConsultasService {
      * Eliminar una autorización de usuario por ID
      * 
      * @param idConsulta 
-     * @param idAsociado 
+     * @param idAsistencia 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public consultasIdConsultaAutorizadosIdAsociadoDelete(idConsulta: number, idAsociado: number, observe?: 'body', reportProgress?: boolean): Observable<ResponseStatus>;
-    public consultasIdConsultaAutorizadosIdAsociadoDelete(idConsulta: number, idAsociado: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ResponseStatus>>;
-    public consultasIdConsultaAutorizadosIdAsociadoDelete(idConsulta: number, idAsociado: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ResponseStatus>>;
-    public consultasIdConsultaAutorizadosIdAsociadoDelete(idConsulta: number, idAsociado: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public consultasIdConsultaAutorizadosIdAsistenciaDelete(idConsulta: number, idAsistencia: number, observe?: 'body', reportProgress?: boolean): Observable<ResponseStatus>;
+    public consultasIdConsultaAutorizadosIdAsistenciaDelete(idConsulta: number, idAsistencia: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ResponseStatus>>;
+    public consultasIdConsultaAutorizadosIdAsistenciaDelete(idConsulta: number, idAsistencia: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ResponseStatus>>;
+    public consultasIdConsultaAutorizadosIdAsistenciaDelete(idConsulta: number, idAsistencia: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (idConsulta === null || idConsulta === undefined) {
-            throw new Error('Required parameter idConsulta was null or undefined when calling consultasIdConsultaAutorizadosIdAsociadoDelete.');
+            throw new Error('Required parameter idConsulta was null or undefined when calling consultasIdConsultaAutorizadosIdAsistenciaDelete.');
         }
 
-        if (idAsociado === null || idAsociado === undefined) {
-            throw new Error('Required parameter idAsociado was null or undefined when calling consultasIdConsultaAutorizadosIdAsociadoDelete.');
+        if (idAsistencia === null || idAsistencia === undefined) {
+            throw new Error('Required parameter idAsistencia was null or undefined when calling consultasIdConsultaAutorizadosIdAsistenciaDelete.');
         }
 
         let headers = this.defaultHeaders;
@@ -152,7 +152,7 @@ export class AutorizacionesConsultasService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<ResponseStatus>('delete',`${this.basePath}/consultas/${encodeURIComponent(String(idConsulta))}/autorizados/${encodeURIComponent(String(idAsociado))}`,
+        return this.httpClient.request<ResponseStatus>('delete',`${this.basePath}/consultas/${encodeURIComponent(String(idConsulta))}/autorizados/${encodeURIComponent(String(idAsistencia))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -166,21 +166,21 @@ export class AutorizacionesConsultasService {
      * Obtener una autorización de usuario por ID
      * 
      * @param idConsulta 
-     * @param idAsociado 
+     * @param idAsistencia 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public consultasIdConsultaAutorizadosIdAsociadoGet(idConsulta: number, idAsociado: number, observe?: 'body', reportProgress?: boolean): Observable<ResponseAutorizacion>;
-    public consultasIdConsultaAutorizadosIdAsociadoGet(idConsulta: number, idAsociado: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ResponseAutorizacion>>;
-    public consultasIdConsultaAutorizadosIdAsociadoGet(idConsulta: number, idAsociado: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ResponseAutorizacion>>;
-    public consultasIdConsultaAutorizadosIdAsociadoGet(idConsulta: number, idAsociado: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public consultasIdConsultaAutorizadosIdAsistenciaGet(idConsulta: number, idAsistencia: number, observe?: 'body', reportProgress?: boolean): Observable<ResponseAutorizacion>;
+    public consultasIdConsultaAutorizadosIdAsistenciaGet(idConsulta: number, idAsistencia: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ResponseAutorizacion>>;
+    public consultasIdConsultaAutorizadosIdAsistenciaGet(idConsulta: number, idAsistencia: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ResponseAutorizacion>>;
+    public consultasIdConsultaAutorizadosIdAsistenciaGet(idConsulta: number, idAsistencia: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (idConsulta === null || idConsulta === undefined) {
-            throw new Error('Required parameter idConsulta was null or undefined when calling consultasIdConsultaAutorizadosIdAsociadoGet.');
+            throw new Error('Required parameter idConsulta was null or undefined when calling consultasIdConsultaAutorizadosIdAsistenciaGet.');
         }
 
-        if (idAsociado === null || idAsociado === undefined) {
-            throw new Error('Required parameter idAsociado was null or undefined when calling consultasIdConsultaAutorizadosIdAsociadoGet.');
+        if (idAsistencia === null || idAsistencia === undefined) {
+            throw new Error('Required parameter idAsistencia was null or undefined when calling consultasIdConsultaAutorizadosIdAsistenciaGet.');
         }
 
         let headers = this.defaultHeaders;
@@ -205,7 +205,7 @@ export class AutorizacionesConsultasService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<ResponseAutorizacion>('get',`${this.basePath}/consultas/${encodeURIComponent(String(idConsulta))}/autorizados/${encodeURIComponent(String(idAsociado))}`,
+        return this.httpClient.request<ResponseAutorizacion>('get',`${this.basePath}/consultas/${encodeURIComponent(String(idConsulta))}/autorizados/${encodeURIComponent(String(idAsistencia))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -220,25 +220,25 @@ export class AutorizacionesConsultasService {
      * 
      * @param body 
      * @param idConsulta 
-     * @param idAsociado 
+     * @param idAsistencia 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public consultasIdConsultaAutorizadosIdAsociadoPut(body: Autorizacion, idConsulta: number, idAsociado: number, observe?: 'body', reportProgress?: boolean): Observable<ResponseStatus>;
-    public consultasIdConsultaAutorizadosIdAsociadoPut(body: Autorizacion, idConsulta: number, idAsociado: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ResponseStatus>>;
-    public consultasIdConsultaAutorizadosIdAsociadoPut(body: Autorizacion, idConsulta: number, idAsociado: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ResponseStatus>>;
-    public consultasIdConsultaAutorizadosIdAsociadoPut(body: Autorizacion, idConsulta: number, idAsociado: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public consultasIdConsultaAutorizadosIdAsistenciaPut(body: Autorizacion, idConsulta: number, idAsistencia: number, observe?: 'body', reportProgress?: boolean): Observable<ResponseStatus>;
+    public consultasIdConsultaAutorizadosIdAsistenciaPut(body: Autorizacion, idConsulta: number, idAsistencia: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ResponseStatus>>;
+    public consultasIdConsultaAutorizadosIdAsistenciaPut(body: Autorizacion, idConsulta: number, idAsistencia: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ResponseStatus>>;
+    public consultasIdConsultaAutorizadosIdAsistenciaPut(body: Autorizacion, idConsulta: number, idAsistencia: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling consultasIdConsultaAutorizadosIdAsociadoPut.');
+            throw new Error('Required parameter body was null or undefined when calling consultasIdConsultaAutorizadosIdAsistenciaPut.');
         }
 
         if (idConsulta === null || idConsulta === undefined) {
-            throw new Error('Required parameter idConsulta was null or undefined when calling consultasIdConsultaAutorizadosIdAsociadoPut.');
+            throw new Error('Required parameter idConsulta was null or undefined when calling consultasIdConsultaAutorizadosIdAsistenciaPut.');
         }
 
-        if (idAsociado === null || idAsociado === undefined) {
-            throw new Error('Required parameter idAsociado was null or undefined when calling consultasIdConsultaAutorizadosIdAsociadoPut.');
+        if (idAsistencia === null || idAsistencia === undefined) {
+            throw new Error('Required parameter idAsistencia was null or undefined when calling consultasIdConsultaAutorizadosIdAsistenciaPut.');
         }
 
         let headers = this.defaultHeaders;
@@ -268,7 +268,7 @@ export class AutorizacionesConsultasService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<ResponseStatus>('put',`${this.basePath}/consultas/${encodeURIComponent(String(idConsulta))}/autorizados/${encodeURIComponent(String(idAsociado))}`,
+        return this.httpClient.request<ResponseStatus>('put',`${this.basePath}/consultas/${encodeURIComponent(String(idConsulta))}/autorizados/${encodeURIComponent(String(idAsistencia))}`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

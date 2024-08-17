@@ -12,7 +12,7 @@
 
 export interface RespuestaUsuario { 
     id: number;
-    idAsociado?: number;
+    idAsistencia: number;
     idPregunta: number;
     idOpcionRespuesta: number;
 }

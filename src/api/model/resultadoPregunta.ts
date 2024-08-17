@@ -9,8 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { ResultadoOpcion } from './resultadoOpcion';
 
-export interface Autorizacion { 
+export interface ResultadoPregunta { 
+    id: number;
+    titulo: string;
+    enunciado: string;
     idConsulta: number;
-    idAsistencia: number;
+    resultadoOpciones?: Array<ResultadoOpcion>;
 }
