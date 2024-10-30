@@ -24,6 +24,8 @@ export class ConsultaComponent {
   loading: boolean = false;
 
   idUsuario: number = -1;
+  asistencias: any[] = [];
+  asistenciasAutorizadas: any[] = [];
   consulta: Consulta = {
     id: 0,
     fecha: '',
@@ -32,6 +34,7 @@ export class ConsultaComponent {
     preguntas: []
   }
   respuestas: RespuestaUsuario[] = [];
+  respuestasTotales: number = 0;
 
   constructor(
     private consultasService: ConsultasService,
@@ -47,23 +50,49 @@ export class ConsultaComponent {
   ngOnInit() {
     this.loading = true;
     this.getIdUsuario();
+    this.getAsistencias();
     const consultaId = parseInt(this.activatedRoute.snapshot.paramMap.get('id')!);
     this.checkUserAuthorization(consultaId);
   }
 
+  getAsistencias() {
+    this.asistencias = JSON.parse(this.cookiesService.get('asistencias'));
+    console.log(this.asistencias);
+  }
+
   checkUserAuthorization(consultaId: number) {
-    this.autorizacionesConsultasService.consultasIdConsultaAutorizadosIdAsociadoGet(consultaId, this.idUsuario).subscribe({
-      next: (response: any) => {
-        if (response.status.status !== 200 || response.autorizaciones === 0) {
-          this.ffsjAlertService.danger('No tienes permisos para ver esta consulta');
-          this.router.navigateByUrl('/consultas');
-        }
-        this.loadConsultaInfo(consultaId);
-      },
-      error: (error) => {
-        console.error('Error al obtener la consulta -> ', error);
-      }
+    const promises = this.asistencias.map(asistencia => {
+      return this.autorizacionesConsultasService.consultasIdConsultaAutorizadosIdAsistenciaGet(consultaId, asistencia).toPromise();
     });
+
+    Promise.all(promises)
+      .then(responses => {
+        let hasError = false;
+        responses.forEach((response: any) => {
+          if (response!.status.status !== 200 || response!.autorizaciones === 0) {
+            hasError = true;
+          } else {
+            this.asistenciasAutorizadas.push(response.autorizaciones[0].idAsistencia);
+          }
+        });
+        const cantidadVotos = this.asistenciasAutorizadas.length;
+        if (hasError) {
+          if (cantidadVotos === 0) {
+            this.ffsjAlertService.danger('No tienes permisos para ver esta consulta');
+            this.router.navigateByUrl('/consultas');
+          } else if (cantidadVotos > 0) {
+            this.ffsjAlertService.warning('No tienes todos los votos autorizados. Puedes votar con ' + cantidadVotos + ' votos en total.');
+          }
+        } else {
+          this.ffsjAlertService.success('Puedes votar en esta consulta con ' + cantidadVotos + ' voto(s).');
+          this.loadConsultaInfo(consultaId);
+        }
+      })
+      .catch(error => {
+        console.error('Error al obtener la consulta -> ', error);
+        this.ffsjAlertService.danger('No tienes permisos para ver esta consulta');
+        this.router.navigateByUrl('/consultas');
+      });
   }
 
   loadConsultaInfo(consultaId: number) {
@@ -93,17 +122,21 @@ export class ConsultaComponent {
 
   guardaRespuesta(respuesta: OpcionRespuesta) {
     console.log('Guardando respuesta', respuesta);
-    let respuestaUsuario: RespuestaUsuario = {
-      id: 0,
-      idAsociado: this.idUsuario,
-      idPregunta: respuesta.idPregunta,
-      idOpcionRespuesta: respuesta.id
-    }
-    this.almacenarRespuesta(respuestaUsuario)
+    this.asistenciasAutorizadas.forEach(asistencia => {
+      let respuestaUsuario: RespuestaUsuario = {
+        id: 0,
+        idAsistencia: asistencia,
+        idPregunta: respuesta.idPregunta,
+        idOpcionRespuesta: respuesta.id
+      }
+      this.almacenarRespuesta(respuestaUsuario)
+    });
+    const preguntasUnicas = new Set(this.respuestas.map(r => r.idPregunta));
+    this.respuestasTotales = preguntasUnicas.size;
   }
 
   almacenarRespuesta(respuestaUsuario: RespuestaUsuario) {
-    const indiceExistente = this.respuestas.findIndex(r => r.idPregunta === respuestaUsuario.idPregunta);
+    const indiceExistente = this.respuestas.findIndex(r => r.idPregunta === respuestaUsuario.idPregunta && r.idAsistencia === respuestaUsuario.idAsistencia);
     if (indiceExistente !== -1) {
       this.respuestas.splice(indiceExistente, 1);
     }

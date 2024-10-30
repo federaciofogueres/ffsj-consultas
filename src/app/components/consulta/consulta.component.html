@@ -29,7 +29,7 @@
         <div class="d-flex justify-content-center mt-4">
             <button class="btn btn-primary" 
                 (click)="enviarRespuestas()"
-                [disabled]="respuestas.length !== consulta.preguntas.length"
+                [disabled]="respuestasTotales !== consulta.preguntas.length"
             >
                 Enviar respuestas
             </button>

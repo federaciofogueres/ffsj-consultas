@@ -36,7 +36,7 @@ import { ConsultasExtraService } from "../../services/consultas-extra.service";
     async isUserAuthorized(idConsulta: number) {
       try {
         const response: any = await firstValueFrom(
-          this.autorizacionesConsultasService.consultasIdConsultaAutorizadosIdAsociadoGet(idConsulta, this.idAsociado)
+          this.autorizacionesConsultasService.consultasIdConsultaAutorizadosIdAsistenciaGet(idConsulta, this.idAsociado)
         );
         console.log(response);
         return response.status.status === 200 && response.autorizaciones !== 0;
