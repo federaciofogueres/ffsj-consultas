@@ -12,13 +12,13 @@ export class FooterComponent {
 
   constructor(
     private cookieService: CookieService
-  ) {}
+  ) { }
 
   redireccionar() {
     if (Boolean(this.cookieService.get('href'))) {
       window.location.href = this.cookieService.get('href');
     } else {
-      window.location.href = 'https://plenos.hogueras.es';
+      window.location.href = 'https://asambleas.hogueras.es';
     }
   }
 }
