@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { Component, Injectable, EventEmitter, Input, Output, Inject } from '@angular/core';
+import { Component, Injectable, EventEmitter, Output, Input, Inject } from '@angular/core';
 import * as i1 from '@angular/common/http';
 import { HttpHeaders, HttpClientModule } from '@angular/common/http';
 import * as i3 from '@angular/forms';
@@ -15,14 +15,14 @@ import * as i1$3 from '@angular/material/dialog';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 
 class FfsjWebComponentsComponent {
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjWebComponentsComponent, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
-    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.11", type: FfsjWebComponentsComponent, isStandalone: true, selector: "lib-ffsj-web-components", ngImport: i0, template: `
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: FfsjWebComponentsComponent, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "20.3.12", type: FfsjWebComponentsComponent, isStandalone: true, selector: "lib-ffsj-web-components", ngImport: i0, template: `
     <p>
       ffsj-web-components works!
     </p>
   `, isInline: true, styles: [""] }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjWebComponentsComponent, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: FfsjWebComponentsComponent, decorators: [{
             type: Component,
             args: [{ selector: 'lib-ffsj-web-components', standalone: true, imports: [], template: `
     <p>
@@ -33,10 +33,10 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.11", ngImpo
 
 class FfsjWebComponentsService {
     constructor() { }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjWebComponentsService, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjWebComponentsService, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: FfsjWebComponentsService, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: FfsjWebComponentsService, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjWebComponentsService, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: FfsjWebComponentsService, decorators: [{
             type: Injectable,
             args: [{
                     providedIn: 'root'
@@ -53,24 +53,29 @@ var AlertType;
 
 class FfsjAlertService {
     constructor() {
+        // Stream de alertas: el componente se suscribe a esto
         this.alert$ = new Subject();
     }
     success(message, duration = 5000) {
-        this.alert$.next({ type: AlertType.Success, message: message, duration: duration });
+        console.log('Lanzando mensaje: ', message);
+        this.alert$.next({ type: AlertType.Success, message, duration });
     }
     danger(message, duration = 5000) {
-        this.alert$.next({ type: AlertType.Danger, message: message, duration: duration });
+        console.log('Lanzando mensaje: ', message);
+        this.alert$.next({ type: AlertType.Danger, message, duration });
     }
     warning(message, duration = 5000) {
-        this.alert$.next({ type: AlertType.Warning, message: message, duration: duration });
+        console.log('Lanzando mensaje: ', message);
+        this.alert$.next({ type: AlertType.Warning, message, duration });
     }
     info(message, duration = 5000) {
-        this.alert$.next({ type: AlertType.Info, message: message, duration: duration });
+        console.log('Lanzando mensaje: ', message);
+        this.alert$.next({ type: AlertType.Info, message, duration });
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjAlertService, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjAlertService, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: FfsjAlertService, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: FfsjAlertService, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjAlertService, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: FfsjAlertService, decorators: [{
             type: Injectable,
             args: [{
                     providedIn: 'root'
@@ -78,11 +83,11 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.11", ngImpo
         }] });
 
 class FfsjAlertComponent {
-    constructor(ffsjAlertService) {
-        this.ffsjAlertService = ffsjAlertService;
-    }
-    ngOnInit() {
-        this.subscription = this.ffsjAlertService.alert$.subscribe(alert => {
+    constructor(alertService) {
+        this.alertService = alertService;
+        this.message = null;
+        console.log('FfsjAlertComponent construido');
+        this.subscription = this.alertService.alert$.subscribe(alert => {
             this.message = alert.message;
             this.type = alert.type;
             setTimeout(() => this.closeAlert(), alert.duration);
@@ -94,10 +99,10 @@ class FfsjAlertComponent {
     closeAlert() {
         this.message = null;
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjAlertComponent, deps: [{ token: FfsjAlertService }], target: i0.ɵɵFactoryTarget.Component }); }
-    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "17.3.11", type: FfsjAlertComponent, isStandalone: true, selector: "lib-ffsj-alert", ngImport: i0, template: "@if (message) {\r\n    <div class=\"alert alert-{{type}}\" role=\"alert\">\r\n        {{message}}\r\n        <button type=\"button\" class=\"close\" (click)=\"closeAlert()\">\r\n          <span aria-hidden=\"true\">&times;</span>\r\n        </button>\r\n    </div>\r\n}", styles: [".alert{display:flex;align-items:center;justify-content:space-between;position:absolute;top:0;right:0;padding:10px}.close{font-size:1.5rem;font-weight:700;background:transparent;border:0}.close:hover{color:#000;text-decoration:none}.close:not(:disabled):not(.disabled):hover,.close:not(:disabled):not(.disabled):focus{opacity:.75}\n"] }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: FfsjAlertComponent, deps: [{ token: FfsjAlertService }], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "20.3.12", type: FfsjAlertComponent, isStandalone: true, selector: "lib-ffsj-alert", ngImport: i0, template: "@if (message) {\r\n    <div class=\"alert alert-{{type}}\" role=\"alert\">\r\n        {{message}}\r\n        <button type=\"button\" class=\"close\" (click)=\"closeAlert()\">\r\n          <span aria-hidden=\"true\">&times;</span>\r\n        </button>\r\n    </div>\r\n}", styles: [".alert{display:flex;align-items:center;justify-content:space-between;position:absolute;top:0;right:0;padding:10px}.close{font-size:1.5rem;font-weight:700;background:transparent;border:0}.close:hover{color:#000;text-decoration:none}.close:not(:disabled):not(.disabled):hover,.close:not(:disabled):not(.disabled):focus{opacity:.75}\n"] }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjAlertComponent, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: FfsjAlertComponent, decorators: [{
             type: Component,
             args: [{ selector: 'lib-ffsj-alert', standalone: true, imports: [], template: "@if (message) {\r\n    <div class=\"alert alert-{{type}}\" role=\"alert\">\r\n        {{message}}\r\n        <button type=\"button\" class=\"close\" (click)=\"closeAlert()\">\r\n          <span aria-hidden=\"true\">&times;</span>\r\n        </button>\r\n    </div>\r\n}", styles: [".alert{display:flex;align-items:center;justify-content:space-between;position:absolute;top:0;right:0;padding:10px}.close{font-size:1.5rem;font-weight:700;background:transparent;border:0}.close:hover{color:#000;text-decoration:none}.close:not(:disabled):not(.disabled):hover,.close:not(:disabled):not(.disabled):focus{opacity:.75}\n"] }]
         }], ctorParameters: () => [{ type: FfsjAlertService }] });
@@ -284,10 +289,10 @@ class CensoService {
             reportProgress: reportProgress
         });
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: CensoService, deps: [{ token: i1.HttpClient }], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: CensoService, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: CensoService, deps: [{ token: i1.HttpClient }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: CensoService, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: CensoService, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: CensoService, decorators: [{
             type: Injectable,
             args: [{
                     providedIn: 'root'
@@ -320,10 +325,10 @@ class EncoderService {
         const decrypted = CryptoJS.AES.decrypt(passwordToDecrypt, this.key, { iv: this.iv });
         return decrypted.toString(CryptoJS.enc.Utf8);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: EncoderService, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: EncoderService, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: EncoderService, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: EncoderService, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: EncoderService, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: EncoderService, decorators: [{
             type: Injectable,
             args: [{
                     providedIn: 'root'
@@ -363,33 +368,32 @@ class AuthService {
         this.cookieService.set('token', this.encoderService.encrypt(token), options);
     }
     async login(user, password) {
-        let usuario = {
+        const usuario = {
             user,
             password: this.encoderService.encrypt(password)
         };
-        return new Promise(async (resolve, reject) => {
+        return new Promise((resolve) => {
             this.censoService.doLogin(usuario).subscribe({
                 next: (res) => {
-                    if (res.solicitud) {
-                        console.log('Cambiar password');
-                        this.censoService.configuration.accessToken = res.solicitud.token;
-                        // this.saveToken(res.solicitud.token!);
-                        resolve({ code: 201, id: res.solicitud.id });
-                    }
-                    else {
-                        console.log(res);
-                        this.saveToken(res.token);
-                        resolve({ code: 200 });
-                    }
                     console.log(res);
-                    this.saveToken(res.token);
+                    // Caso: el backend devuelve 'solicitud' (cambio de contraseña)
+                    if (res.solicitud) {
+                        this.censoService.configuration.accessToken = res.solicitud.token;
+                        this.loginStatus$.next(true);
+                        resolve({ code: 201, id: res.solicitud.id });
+                        return;
+                    }
+                    // Caso: login normal con token
+                    if (res.token) {
+                        this.saveToken(res.token);
+                    }
                     this.loginStatus$.next(true);
-                    resolve(res);
+                    resolve({ code: 200 });
                 },
                 error: (error) => {
                     console.log(error);
                     this.loginStatus$.next(false);
-                    reject({ code: 400 });
+                    resolve({ code: 400 });
                 }
             });
         });
@@ -410,9 +414,21 @@ class AuthService {
         return (JSON.parse(atob(token.split('.')[1]))).id;
     }
     logout() {
+        const isLocal = this.isLocalDomain();
+        const hostName = isLocal ? undefined : '.hogueras.es';
+        // Borrar la cookie con los mismos parámetros con los que se creó
+        if (isLocal) {
+            // En localhost la cookie se creó sin domain, pero sí con path '/'
+            this.cookieService.delete('token', '/');
+        }
+        else {
+            // En producción se creó con domain '.hogueras.es' y path '/'
+            this.cookieService.delete('token', '/', hostName);
+        }
+        // Por si existiera alguna variante sin path/domain
         this.cookieService.delete('token');
-        this.router.navigateByUrl('login');
         this.loginStatus$.next(false);
+        this.router.navigateByUrl('login');
     }
     isLoggedIn() {
         const token = this.cookieService.get('token');
@@ -465,10 +481,10 @@ class AuthService {
             });
         });
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: AuthService, deps: [{ token: i1$1.Router }, { token: CensoService }, { token: EncoderService }, { token: i4.CookieService }], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: AuthService, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: AuthService, deps: [{ token: i1$1.Router }, { token: CensoService }, { token: EncoderService }, { token: i4.CookieService }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: AuthService, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: AuthService, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: AuthService, decorators: [{
             type: Injectable,
             args: [{
                     providedIn: 'root'
@@ -502,13 +518,13 @@ class FfsjLoginComponent {
             const codeLogin = await this.authService.login(this.username.value, this.password.value);
             if (codeLogin.code === 200) {
                 this.loading = false;
-                // this.alertService.success('Bienvenido!', 5000)
-                this.logStatus.emit(true);
+                this.alertService.success('Bienvenido!', 5000);
+                this.logStatus.emit(true); // el padre sabe que ha ido bien
             }
             else if (codeLogin.code === 400) {
                 this.loading = false;
-                // this.alertService.danger('Datos incorrectos de inicio de sesión.', 5000)
-                this.logStatus.emit(false);
+                this.alertService.danger('Datos incorrectos de inicio de sesión.', 5000);
+                this.logStatus.emit(false); // el padre sabe que ha fallado
             }
             else if (codeLogin.code === 201) {
                 this.idAsociadoToChangePassword = codeLogin.id;
@@ -516,6 +532,8 @@ class FfsjLoginComponent {
                 this.username.disable();
                 this.password.reset();
                 this.loading = false;
+                this.alertService.info('Debes actualizar tu contraseña.', 5000);
+                // aquí podrías emitir algo especial si quisieras
             }
         }
         else {
@@ -532,20 +550,20 @@ class FfsjLoginComponent {
         this.authService.updatePassword(this.idAsociadoToChangePassword, this.password.value)
             .then((res) => {
             console.log(res);
-            // this.alertService.success('Contraseña actualizada correctamente.', 5000);
+            this.alertService.success('Contraseña actualizada correctamente.', 5000);
             this.showChangePasswordForm = false;
             this.username.enable();
             this.login();
         })
             .catch((error) => {
             console.log(error);
-            // this.alertService.danger('Error al actualizar la contraseña.', 5000);
+            this.alertService.danger('Error al actualizar la contraseña.', 5000);
         });
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjLoginComponent, deps: [{ token: AuthService }, { token: FfsjAlertService }], target: i0.ɵɵFactoryTarget.Component }); }
-    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "17.3.11", type: FfsjLoginComponent, isStandalone: true, selector: "lib-ffsj-login", inputs: { title: "title", subtitle: "subtitle" }, outputs: { logStatus: "logStatus" }, ngImport: i0, template: "\r\n    <div class=\"container mt-4 login-container\">\r\n  \r\n      <div class=\"row banner\">\r\n        <h1>\r\n          <img src=\"https://intranet.hogueras.es/wp-content/uploads/2016/12/logofede.png\" class=\"img-fluid\" alt=\"\">\r\n          <span style=\"color: #dd5a43 !important\">{{title}}</span>\r\n        </h1>\r\n        <h4 style=\"color: #478fca !important; text-align: center;\">\u00A9 Federaci\u00F3 de Les Fogueres de Sant Joan</h4>\r\n      </div>\r\n  \r\n      <div class=\"row\">\r\n        <h4 class=\"titulo-consultas\" style=\"color: #478fca !important;\">\r\n          {{subtitle}}\r\n        </h4>\r\n      </div>\r\n      <div class=\"row my-3\">\r\n        <label for=\"username\">Usuario</label>\r\n        <input type=\"text\" id=\"username\" class=\"form-control\" [formControl]=\"username\" value=\"\">\r\n      </div>\r\n      @if (showChangePasswordForm) {\r\n        <div class=\"row mb-3\">\r\n          <label for=\"password\">Nueva contrase\u00F1a</label>\r\n        <input type=\"password\" id=\"password\" class=\"form-control\" [formControl]=\"password\" value=\"\">\r\n        </div>\r\n        <div class=\"row mb-3\">\r\n          <label for=\"repeatPassword\">Repite la nueva contrase\u00F1a</label>\r\n          <input type=\"password\" id=\"repeatPassword\" class=\"form-control\" [formControl]=\"repeatPassword\" value=\"\">\r\n        </div>\r\n      } @else {\r\n        <div class=\"row mb-3\">\r\n            <label for=\"password\">Contrase\u00F1a</label>\r\n          <input type=\"password\" id=\"password\" class=\"form-control\" [formControl]=\"password\" value=\"\">\r\n        </div>\r\n      }\r\n      @if(showChangePasswordForm) {\r\n        <div class=\"row submit-button mt-2\">\r\n          <button (click)=\"changePassword()\">Actualizar contrase\u00F1a</button>\r\n        </div>\r\n      } @else {\r\n        <div class=\"row submit-button mt-2\">\r\n          <button (click)=\"login()\">Iniciar sesi\u00F3n</button>\r\n        </div>\r\n      }\r\n  \r\n    </div>\r\n\r\n    <lib-ffsj-alert></lib-ffsj-alert>", styles: [".login-container{max-width:350px}.login-container .row.banner{text-align:center}.login-container .row.banner img{max-height:75px}.submit-button button{margin:auto;color:#fff;background-color:#0033a0;border:1px solid #0033A0;font-weight:700;padding:10px 20px;border-radius:25px;width:auto;max-width:80%}.row.banner{text-align:center}.row.banner img{max-height:75px}\n"], dependencies: [{ kind: "ngmodule", type: ReactiveFormsModule }, { kind: "directive", type: i3.DefaultValueAccessor, selector: "input:not([type=checkbox])[formControlName],textarea[formControlName],input:not([type=checkbox])[formControl],textarea[formControl],input:not([type=checkbox])[ngModel],textarea[ngModel],[ngDefaultControl]" }, { kind: "directive", type: i3.NgControlStatus, selector: "[formControlName],[ngModel],[formControl]" }, { kind: "directive", type: i3.FormControlDirective, selector: "[formControl]", inputs: ["formControl", "disabled", "ngModel"], outputs: ["ngModelChange"], exportAs: ["ngForm"] }, { kind: "ngmodule", type: HttpClientModule }, { kind: "component", type: FfsjAlertComponent, selector: "lib-ffsj-alert" }] }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: FfsjLoginComponent, deps: [{ token: AuthService }, { token: FfsjAlertService }], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "20.3.12", type: FfsjLoginComponent, isStandalone: true, selector: "lib-ffsj-login", inputs: { title: "title", subtitle: "subtitle" }, outputs: { logStatus: "logStatus" }, ngImport: i0, template: "\r\n    <div class=\"container mt-4 login-container\">\r\n  \r\n      <div class=\"row banner\">\r\n        <h1>\r\n          <img src=\"https://intranet.hogueras.es/wp-content/uploads/2016/12/logofede.png\" class=\"img-fluid\" alt=\"\">\r\n          <span style=\"color: #dd5a43 !important\">{{title}}</span>\r\n        </h1>\r\n        <h4 style=\"color: #478fca !important; text-align: center;\">\u00A9 Federaci\u00F3 de Les Fogueres de Sant Joan</h4>\r\n      </div>\r\n  \r\n      <div class=\"row\">\r\n        <h4 class=\"titulo-consultas\" style=\"color: #478fca !important;\">\r\n          {{subtitle}}\r\n        </h4>\r\n      </div>\r\n      <div class=\"row my-3\">\r\n        <label for=\"username\">Usuario</label>\r\n        <input type=\"text\" id=\"username\" class=\"form-control\" [formControl]=\"username\" value=\"\">\r\n      </div>\r\n      @if (showChangePasswordForm) {\r\n        <div class=\"row mb-3\">\r\n          <label for=\"password\">Nueva contrase\u00F1a</label>\r\n        <input type=\"password\" id=\"password\" class=\"form-control\" [formControl]=\"password\" value=\"\">\r\n        </div>\r\n        <div class=\"row mb-3\">\r\n          <label for=\"repeatPassword\">Repite la nueva contrase\u00F1a</label>\r\n          <input type=\"password\" id=\"repeatPassword\" class=\"form-control\" [formControl]=\"repeatPassword\" value=\"\">\r\n        </div>\r\n      } @else {\r\n        <div class=\"row mb-3\">\r\n            <label for=\"password\">Contrase\u00F1a</label>\r\n          <input type=\"password\" id=\"password\" class=\"form-control\" [formControl]=\"password\" value=\"\">\r\n        </div>\r\n      }\r\n      @if(showChangePasswordForm) {\r\n        <div class=\"row submit-button mt-2\">\r\n          <button (click)=\"changePassword()\">Actualizar contrase\u00F1a</button>\r\n        </div>\r\n      } @else {\r\n        <div class=\"row submit-button mt-2\">\r\n          <button (click)=\"login()\">Iniciar sesi\u00F3n</button>\r\n        </div>\r\n      }\r\n  \r\n    </div>\r\n\r\n    <lib-ffsj-alert></lib-ffsj-alert>", styles: [".login-container{max-width:350px}.login-container .row.banner{text-align:center}.login-container .row.banner img{max-height:75px}.submit-button button{margin:auto;color:#fff;background-color:#0033a0;border:1px solid #0033A0;font-weight:700;padding:10px 20px;border-radius:25px;width:auto;max-width:80%}.row.banner{text-align:center}.row.banner img{max-height:75px}\n"], dependencies: [{ kind: "ngmodule", type: ReactiveFormsModule }, { kind: "directive", type: i3.DefaultValueAccessor, selector: "input:not([type=checkbox])[formControlName],textarea[formControlName],input:not([type=checkbox])[formControl],textarea[formControl],input:not([type=checkbox])[ngModel],textarea[ngModel],[ngDefaultControl]" }, { kind: "directive", type: i3.NgControlStatus, selector: "[formControlName],[ngModel],[formControl]" }, { kind: "directive", type: i3.FormControlDirective, selector: "[formControl]", inputs: ["formControl", "disabled", "ngModel"], outputs: ["ngModelChange"], exportAs: ["ngForm"] }, { kind: "ngmodule", type: HttpClientModule }, { kind: "component", type: FfsjAlertComponent, selector: "lib-ffsj-alert" }] }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjLoginComponent, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: FfsjLoginComponent, decorators: [{
             type: Component,
             args: [{ selector: 'lib-ffsj-login', standalone: true, imports: [
                         ReactiveFormsModule,
@@ -577,10 +595,10 @@ class AuthGuard {
             return false;
         }
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: AuthGuard, deps: [{ token: AuthService }, { token: i1$1.Router }, { token: CensoService }], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: AuthGuard, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: AuthGuard, deps: [{ token: AuthService }, { token: i1$1.Router }, { token: CensoService }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: AuthGuard, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: AuthGuard, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: AuthGuard, decorators: [{
             type: Injectable,
             args: [{
                     providedIn: 'root'
@@ -592,10 +610,10 @@ class FfsjSpinnerComponent {
         this.fullscreen = false;
         this.imagePath = '../../../assets/img/fede.png';
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjSpinnerComponent, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
-    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.11", type: FfsjSpinnerComponent, isStandalone: true, selector: "lib-ffsj-spinner", inputs: { fullscreen: "fullscreen" }, ngImport: i0, template: "<div class=\"bg-dark preloader\" [ngClass]=\"fullscreen ? ['full-size'] : ['component']\">\r\n    <div class=\"spinner-container\">\r\n        <img [src]=\"imagePath\">\r\n    </div>\r\n    <div class=\"loader\">\r\n        <span></span>\r\n    </div>\r\n</div>", styles: [".full-size{position:fixed}.component{position:relative}.preloader{top:0;left:0;margin:0 auto;width:100%;height:100%;display:flex;justify-content:center;align-items:center;z-index:997}.preloader .spinner-container{width:200px;height:200px;display:flex;justify-content:center;align-items:center}.preloader .spinner-container img{width:130px;height:130px;z-index:999;position:relative}.preloader .loader{position:absolute;width:200px;height:200px;border:4px solid transparent;overflow:hidden;border-radius:50%}.preloader .loader:before{content:\"\";position:absolute;inset:10px;z-index:998;background:#fff;border-radius:50%;border:2px solid transparent}.preloader .loader>span{position:absolute;width:100%;height:100%;border-radius:50%;background-image:linear-gradient(-225deg,#0245ff,#00e1ff,#5edfff);filter:blur(20px);animation:animate .5s linear infinite}@keyframes animate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}\n"], dependencies: [{ kind: "ngmodule", type: CommonModule }, { kind: "directive", type: i1$2.NgClass, selector: "[ngClass]", inputs: ["class", "ngClass"] }] }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: FfsjSpinnerComponent, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "20.3.12", type: FfsjSpinnerComponent, isStandalone: true, selector: "lib-ffsj-spinner", inputs: { fullscreen: "fullscreen" }, ngImport: i0, template: "<div class=\"bg-dark preloader\" [ngClass]=\"fullscreen ? ['full-size'] : ['component']\">\r\n    <div class=\"spinner-container\">\r\n        <img [src]=\"imagePath\">\r\n    </div>\r\n    <div class=\"loader\">\r\n        <span></span>\r\n    </div>\r\n</div>", styles: [".full-size{position:fixed}.component{position:relative}.preloader{top:0;left:0;margin:0 auto;width:100%;height:100%;display:flex;justify-content:center;align-items:center;z-index:997}.preloader .spinner-container{width:200px;height:200px;display:flex;justify-content:center;align-items:center}.preloader .spinner-container img{width:130px;height:130px;z-index:999;position:relative}.preloader .loader{position:absolute;width:200px;height:200px;border:4px solid transparent;overflow:hidden;border-radius:50%}.preloader .loader:before{content:\"\";position:absolute;inset:10px;z-index:998;background:#fff;border-radius:50%;border:2px solid transparent}.preloader .loader>span{position:absolute;width:100%;height:100%;border-radius:50%;background-image:linear-gradient(-225deg,#0245ff,#00e1ff,#5edfff);filter:blur(20px);animation:animate .5s linear infinite}@keyframes animate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}\n"], dependencies: [{ kind: "ngmodule", type: CommonModule }, { kind: "directive", type: i1$2.NgClass, selector: "[ngClass]", inputs: ["class", "ngClass"] }] }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjSpinnerComponent, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: FfsjSpinnerComponent, decorators: [{
             type: Component,
             args: [{ selector: 'lib-ffsj-spinner', standalone: true, imports: [CommonModule], template: "<div class=\"bg-dark preloader\" [ngClass]=\"fullscreen ? ['full-size'] : ['component']\">\r\n    <div class=\"spinner-container\">\r\n        <img [src]=\"imagePath\">\r\n    </div>\r\n    <div class=\"loader\">\r\n        <span></span>\r\n    </div>\r\n</div>", styles: [".full-size{position:fixed}.component{position:relative}.preloader{top:0;left:0;margin:0 auto;width:100%;height:100%;display:flex;justify-content:center;align-items:center;z-index:997}.preloader .spinner-container{width:200px;height:200px;display:flex;justify-content:center;align-items:center}.preloader .spinner-container img{width:130px;height:130px;z-index:999;position:relative}.preloader .loader{position:absolute;width:200px;height:200px;border:4px solid transparent;overflow:hidden;border-radius:50%}.preloader .loader:before{content:\"\";position:absolute;inset:10px;z-index:998;background:#fff;border-radius:50%;border:2px solid transparent}.preloader .loader>span{position:absolute;width:100%;height:100%;border-radius:50%;background-image:linear-gradient(-225deg,#0245ff,#00e1ff,#5edfff);filter:blur(20px);animation:animate .5s linear infinite}@keyframes animate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}\n"] }]
         }], propDecorators: { fullscreen: [{
@@ -614,10 +632,10 @@ class FfsjDialogAlertComponent {
         this.dialogSelfRef = dialogSelfRef;
         this.data = data;
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjDialogAlertComponent, deps: [{ token: i1$3.MatDialogRef }, { token: MAT_DIALOG_DATA }], target: i0.ɵɵFactoryTarget.Component }); }
-    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "17.3.11", type: FfsjDialogAlertComponent, isStandalone: true, selector: "lib-ffsj-dialog-alert", ngImport: i0, template: "<h2 mat-dialog-title>{{ data.title }}</h2>\r\n<mat-dialog-content>\r\n  {{ data.content }}\r\n</mat-dialog-content>\r\n<mat-dialog-actions>\r\n  @for (button of data.buttonsAlert; track $index) {\r\n    <button mat-button (click)=\"dialogSelfRef.close(button)\">{{ button }}</button>\r\n  }\r\n</mat-dialog-actions>\r\n", styles: [""], dependencies: [{ kind: "ngmodule", type: MatDialogModule }, { kind: "directive", type: i1$3.MatDialogTitle, selector: "[mat-dialog-title], [matDialogTitle]", inputs: ["id"], exportAs: ["matDialogTitle"] }, { kind: "directive", type: i1$3.MatDialogActions, selector: "[mat-dialog-actions], mat-dialog-actions, [matDialogActions]", inputs: ["align"] }, { kind: "directive", type: i1$3.MatDialogContent, selector: "[mat-dialog-content], mat-dialog-content, [matDialogContent]" }] }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: FfsjDialogAlertComponent, deps: [{ token: i1$3.MatDialogRef }, { token: MAT_DIALOG_DATA }], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "20.3.12", type: FfsjDialogAlertComponent, isStandalone: true, selector: "lib-ffsj-dialog-alert", ngImport: i0, template: "<h2 mat-dialog-title>{{ data.title }}</h2>\r\n<mat-dialog-content>\r\n  {{ data.content }}\r\n</mat-dialog-content>\r\n<mat-dialog-actions>\r\n  @for (button of data.buttonsAlert; track $index) {\r\n    <button mat-button (click)=\"dialogSelfRef.close(button)\">{{ button }}</button>\r\n  }\r\n</mat-dialog-actions>\r\n", styles: [""], dependencies: [{ kind: "ngmodule", type: MatDialogModule }, { kind: "directive", type: i1$3.MatDialogTitle, selector: "[mat-dialog-title], [matDialogTitle]", inputs: ["id"], exportAs: ["matDialogTitle"] }, { kind: "directive", type: i1$3.MatDialogActions, selector: "[mat-dialog-actions], mat-dialog-actions, [matDialogActions]", inputs: ["align"] }, { kind: "directive", type: i1$3.MatDialogContent, selector: "[mat-dialog-content], mat-dialog-content, [matDialogContent]" }] }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjDialogAlertComponent, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: FfsjDialogAlertComponent, decorators: [{
             type: Component,
             args: [{ selector: 'lib-ffsj-dialog-alert', standalone: true, imports: [MatDialogModule], template: "<h2 mat-dialog-title>{{ data.title }}</h2>\r\n<mat-dialog-content>\r\n  {{ data.content }}\r\n</mat-dialog-content>\r\n<mat-dialog-actions>\r\n  @for (button of data.buttonsAlert; track $index) {\r\n    <button mat-button (click)=\"dialogSelfRef.close(button)\">{{ button }}</button>\r\n  }\r\n</mat-dialog-actions>\r\n" }]
         }], ctorParameters: () => [{ type: i1$3.MatDialogRef }, { type: undefined, decorators: [{
@@ -636,10 +654,10 @@ class FfsjDialogAlertService {
         });
         return dialogRef;
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjDialogAlertService, deps: [{ token: i1$3.MatDialog }], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjDialogAlertService, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: FfsjDialogAlertService, deps: [{ token: i1$3.MatDialog }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: FfsjDialogAlertService, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.11", ngImport: i0, type: FfsjDialogAlertService, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.3.12", ngImport: i0, type: FfsjDialogAlertService, decorators: [{
             type: Injectable,
             args: [{
                     providedIn: 'root'

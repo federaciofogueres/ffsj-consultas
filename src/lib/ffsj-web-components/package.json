@@ -1,13 +1,13 @@
 {
   "name": "ffsj-web-components",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "peerDependencies": {
-    "@angular/common": "^17.3.0",
-    "@angular/core": "^17.3.0",
-    "@angular/material": "^17.1.2"
+    "@angular/common": "^20.0.0",
+    "@angular/core": "^20.0.0",
+    "@angular/material": "^20.0.0"
   },
   "dependencies": {
-    "tslib": "^2.3.0"
+    "tslib": "^2.6.2"
   },
   "sideEffects": false,
   "module": "fesm2022/ffsj-web-components.mjs",
@@ -18,8 +18,6 @@
     },
     ".": {
       "types": "./index.d.ts",
-      "esm2022": "./esm2022/ffsj-web-components.mjs",
-      "esm": "./esm2022/ffsj-web-components.mjs",
       "default": "./fesm2022/ffsj-web-components.mjs"
     }
   }
