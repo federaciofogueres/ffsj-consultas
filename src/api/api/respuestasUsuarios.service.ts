@@ -10,12 +10,7 @@
  * Do not edit the class manually.
  *//* tslint:disable:no-unused-variable member-ordering */
 
-import {
-    HttpClient,
-    HttpEvent,
-    HttpHeaders,
-    HttpResponse
-} from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable, Optional } from '@angular/core';
 
 import { Observable } from 'rxjs';
