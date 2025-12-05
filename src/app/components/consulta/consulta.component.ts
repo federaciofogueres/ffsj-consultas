@@ -8,16 +8,15 @@ import { OpcionesComponent } from '../opciones/opciones.component';
 import { PreguntaComponent } from '../pregunta/pregunta.component';
 
 @Component({
-  selector: 'app-consulta',
-  standalone: true,
-  imports: [
-    OpcionesComponent,
-    PreguntaComponent,
-    FfsjSpinnerComponent
-  ],
-  templateUrl: './consulta.component.html',
-  styleUrl: './consulta.component.scss',
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    selector: 'app-consulta',
+    imports: [
+        OpcionesComponent,
+        PreguntaComponent,
+        FfsjSpinnerComponent
+    ],
+    templateUrl: './consulta.component.html',
+    styleUrl: './consulta.component.scss',
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ConsultaComponent {
 

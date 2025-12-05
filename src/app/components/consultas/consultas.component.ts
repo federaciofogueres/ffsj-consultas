@@ -6,13 +6,12 @@ import { AutorizacionesConsultasService, Consulta, ConsultasService } from "../.
 import { ConsultasExtraService } from "../../services/consultas-extra.service";
 
 @Component({
-  selector: 'app-consultas',
-  standalone: true,
-  imports: [
-    FfsjSpinnerComponent
-  ],
-  templateUrl: './consultas.component.html',
-  styleUrl: './consultas.component.scss'
+    selector: 'app-consultas',
+    imports: [
+        FfsjSpinnerComponent
+    ],
+    templateUrl: './consultas.component.html',
+    styleUrl: './consultas.component.scss'
 })
 export class ConsultasComponent {
 

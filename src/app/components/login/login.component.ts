@@ -3,13 +3,12 @@ import { Router } from '@angular/router';
 import { FfsjLoginComponent } from 'ffsj-web-components';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [
-    FfsjLoginComponent
-  ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+    selector: 'app-login',
+    imports: [
+        FfsjLoginComponent
+    ],
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.scss'
 })
 export class LoginComponent {
 
