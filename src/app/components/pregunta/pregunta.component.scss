@@ -1,19 +1,23 @@
-@import '../../../styles.scss';
+@use '../../../styles' as *;
 
 .header-pregunta {
     width: 100%;
     display: flex;
+
     @media (max-width: 425px) {
         flex-direction: column;
         align-items: center;
     }
+
     .info-pregunta {
         @media (min-width: 425px) {
             min-width: 82%;
         }
+
         @media (max-width: 424px) {
             width: 100%;
         }
+
         .numero {
             background-color: $azul-oscuro-color;
             color: white;
@@ -26,12 +30,15 @@
             color: $azul-oscuro-color;
         }
     }
+
     img {
         margin: 0;
         max-width: 30%;
+
         @media (min-width: 425px) {
             min-width: 18%;
         }
+
         @media (max-width: 424px) {
             width: 100%;
             margin-bottom: 1em;

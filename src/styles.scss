@@ -1,11 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import 'bootstrap/scss/bootstrap';
-@import 'swiper/swiper-bundle.css';
+@use 'bootstrap/scss/bootstrap';
+@use 'swiper/swiper-bundle.css';
 
 $azul-oscuro-color: #0033A0;
 $azul-claro-color: #00C1D5;
 $naranja-color: #F1B434;
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
