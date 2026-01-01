@@ -63,21 +63,21 @@ export class ConsultasComponent {
 
   async loadConsultas() {
     try {
-      const response = await firstValueFrom(this.consultasService.consultasGet());
+      if (this.idAsistencias.length === 0 && this.idAsociado <= 0) {
+        this.consultas = [];
+        return;
+      }
+
+      const response = await firstValueFrom(
+        this.consultasService.consultasAutorizadasGet(this.idAsistencias, this.idAsociado)
+      );
       console.log(response);
       if (response.status.status === 200) {
-        const autorizaciones = await Promise.all(
-          response.consultas.map(async consulta => ({
-            consulta,
-            autorizado: await this.isUserAuthorized(consulta.id)
-          }))
-        );
-        this.consultas = autorizaciones
-          .filter(({ autorizado }) => autorizado)
-          .map(({ consulta }) => consulta);
+        this.consultas = Array.isArray(response.consultas) ? response.consultas : [];
       }
     } catch (error) {
       console.error(error);
+      this.ffsjAlertService.danger('No se han podido cargar las consultas autorizadas.');
     } finally {
       this.loading = false;
     }

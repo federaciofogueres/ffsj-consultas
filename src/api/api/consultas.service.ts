@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  *//* tslint:disable:no-unused-variable member-ordering */
 
-import { HttpClient, HttpEvent, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable, Optional } from '@angular/core';
 
 import { Observable } from 'rxjs';
@@ -94,6 +94,58 @@ export class ConsultasService {
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Obtener consultas autorizadas para un usuario
+     * 
+     * @param idAsistencias 
+     * @param idAsociado 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public consultasAutorizadasGet(idAsistencias?: number[], idAsociado?: number, observe?: 'body', reportProgress?: boolean): Observable<ResponseConsultas>;
+    public consultasAutorizadasGet(idAsistencias?: number[], idAsociado?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ResponseConsultas>>;
+    public consultasAutorizadasGet(idAsistencias?: number[], idAsociado?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ResponseConsultas>>;
+    public consultasAutorizadasGet(idAsistencias: number[] = [], idAsociado?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        let queryParameters = new HttpParams();
+        if (idAsistencias && idAsistencias.length > 0) {
+            idAsistencias.forEach(idAsistencia => {
+                queryParameters = queryParameters.append('idAsistencia', idAsistencia as any);
+            });
+        }
+        if (idAsociado !== null && idAsociado !== undefined) {
+            queryParameters = queryParameters.set('idAsociado', idAsociado as any);
+        }
+
+        return this.httpClient.request<ResponseConsultas>('get',`${this.basePath}/consultas/autorizadas`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                params: queryParameters,
                 observe: observe,
                 reportProgress: reportProgress
             }

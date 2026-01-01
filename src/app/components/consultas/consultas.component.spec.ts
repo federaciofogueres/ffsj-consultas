@@ -29,7 +29,7 @@ describe('ConsultasComponent', () => {
         { provide: AutorizacionesConsultasService, useValue: autorizacionesService },
         {
           provide: ConsultasService,
-          useValue: jasmine.createSpyObj('ConsultasService', ['consultasGet'])
+          useValue: jasmine.createSpyObj('ConsultasService', ['consultasAutorizadasGet'])
         },
         { provide: Router, useValue: router },
         {
@@ -53,7 +53,7 @@ describe('ConsultasComponent', () => {
     });
 
     const consultasService = TestBed.inject(ConsultasService) as jasmine.SpyObj<ConsultasService>;
-    consultasService.consultasGet.and.returnValue(of({ status: { status: 200 }, consultas: [] }) as any);
+    consultasService.consultasAutorizadasGet.and.returnValue(of({ status: { status: 200 }, consultas: [] }) as any);
 
     component = TestBed.createComponent(ConsultasComponent).componentInstance;
     consultasExtraService = TestBed.inject(ConsultasExtraService);
@@ -96,5 +96,15 @@ describe('ConsultasComponent', () => {
 
     const result = await component.isUserAuthorized(12);
     expect(result).toBeTrue();
+  });
+
+  it('evita cargar consultas si no hay identificadores', async () => {
+    const consultasService = TestBed.inject(ConsultasService) as jasmine.SpyObj<ConsultasService>;
+    component.idAsistencias = [];
+    component.idAsociado = 0;
+
+    await component.loadConsultas();
+
+    expect(consultasService.consultasAutorizadasGet).not.toHaveBeenCalled();
   });
 });
