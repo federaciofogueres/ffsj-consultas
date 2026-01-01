@@ -2,10 +2,12 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService, FfsjAlertService, FfsjSpinnerComponent } from 'ffsj-web-components';
 import { jwtDecode } from "jwt-decode";
-import { CookieService } from 'ngx-cookie-service';
+import { firstValueFrom } from 'rxjs';
 import { AutorizacionesConsultasService, Consulta, ConsultasService, OpcionRespuesta, ResponseConsulta, ResponseStatus, RespuestasUsuariosService, RespuestaUsuario } from '../../../api';
 import { OpcionesComponent } from '../opciones/opciones.component';
 import { PreguntaComponent } from '../pregunta/pregunta.component';
+import { ConsultasExtraService } from '../../services/consultas-extra.service';
+import { NavigationService } from '../../services/navigation.service';
 
 @Component({
     selector: 'app-consulta',
@@ -37,61 +39,70 @@ export class ConsultaComponent {
 
   constructor(
     private consultasService: ConsultasService,
-    private cookiesService: CookieService,
     private respuestasUsuariosService: RespuestasUsuariosService,
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private ffsjAlertService: FfsjAlertService,
     private autorizacionesConsultasService: AutorizacionesConsultasService,
-    private router: Router
+    private router: Router,
+    private consultasExtraService: ConsultasExtraService,
+    private navigationService: NavigationService
   ){}
 
   ngOnInit() {
     this.loading = true;
+    this.captureReturnUrl();
+    this.captureAsistencias();
     this.getIdUsuario();
-    this.getAsistencias();
     const consultaId = parseInt(this.activatedRoute.snapshot.paramMap.get('id')!);
     this.checkUserAuthorization(consultaId);
   }
 
-  getAsistencias() {
-    this.asistencias = JSON.parse(this.cookiesService.get('asistencias'));
-    console.log(this.asistencias);
-  }
-
-  checkUserAuthorization(consultaId: number) {
-    const promises = this.asistencias.map(asistencia => {
-      return this.autorizacionesConsultasService.consultasIdConsultaAutorizadosIdAsistenciaGet(consultaId, asistencia).toPromise();
-    });
-
-    Promise.all(promises)
-      .then(responses => {
-        let hasError = false;
-        responses.forEach((response: any) => {
-          if (response!.status.status !== 200 || response!.autorizaciones === 0) {
-            hasError = true;
-          } else {
-            this.asistenciasAutorizadas.push(response.autorizaciones[0].idAsistencia);
-          }
-        });
-        const cantidadVotos = this.asistenciasAutorizadas.length;
-        if (hasError) {
-          if (cantidadVotos === 0) {
-            this.ffsjAlertService.danger('No tienes permisos para ver esta consulta');
-            this.router.navigateByUrl('/consultas');
-          } else if (cantidadVotos > 0) {
-            this.ffsjAlertService.warning('No tienes todos los votos autorizados. Puedes votar con ' + cantidadVotos + ' votos en total.');
-          }
-        } else {
-          this.ffsjAlertService.success('Puedes votar en esta consulta con ' + cantidadVotos + ' voto(s).');
-          this.loadConsultaInfo(consultaId);
-        }
-      })
-      .catch(error => {
-        console.error('Error al obtener la consulta -> ', error);
+  async checkUserAuthorization(consultaId: number) {
+    try {
+      this.asistenciasAutorizadas = [];
+      this.asistencias = await this.resolveAsistencias(consultaId);
+      if (this.asistencias.length === 0) {
         this.ffsjAlertService.danger('No tienes permisos para ver esta consulta');
         this.router.navigateByUrl('/consultas');
+        this.loading = false;
+        return;
+      }
+
+      const responses = await Promise.all(
+        this.asistencias.map(asistencia =>
+          firstValueFrom(this.autorizacionesConsultasService.consultasIdConsultaAutorizadosIdAsistenciaGet(consultaId, asistencia))
+        )
+      );
+
+      let hasError = false;
+      responses.forEach((response: any) => {
+        if (response.status.status !== 200 || response.autorizaciones === 0) {
+          hasError = true;
+        } else {
+          this.asistenciasAutorizadas.push(response.autorizaciones[0].idAsistencia);
+        }
       });
+      const cantidadVotos = this.asistenciasAutorizadas.length;
+      if (hasError) {
+        if (cantidadVotos === 0) {
+          this.ffsjAlertService.danger('No tienes permisos para ver esta consulta');
+          this.router.navigateByUrl('/consultas');
+          this.loading = false;
+        } else if (cantidadVotos > 0) {
+          this.ffsjAlertService.warning('No tienes todos los votos autorizados. Puedes votar con ' + cantidadVotos + ' votos en total.');
+          this.loadConsultaInfo(consultaId);
+        }
+      } else {
+        this.ffsjAlertService.success('Puedes votar en esta consulta con ' + cantidadVotos + ' voto(s).');
+        this.loadConsultaInfo(consultaId);
+      }
+    } catch (error) {
+      console.error('Error al obtener la consulta -> ', error);
+      this.ffsjAlertService.danger('No tienes permisos para ver esta consulta');
+      this.router.navigateByUrl('/consultas');
+      this.loading = false;
+    }
   }
 
   loadConsultaInfo(consultaId: number) {
@@ -110,6 +121,7 @@ export class ConsultaComponent {
       },
       error: (error) => {
         console.error('Error al obtener la consulta -> ', error);
+        this.loading = false;
       }
     })
   }
@@ -166,18 +178,54 @@ export class ConsultaComponent {
     }).catch(error => {
       console.error('Error en el envío de alguna respuesta', error);
       this.ffsjAlertService.danger(error.error);
+      this.loading = false;
 
     });
   }
   
   redireccionar() {
-    if (Boolean(this.cookiesService.get('href'))) {
-      window.location.href = this.cookiesService.get('href');
-    } else {
-      console.log('No se ha encontrado la URL de redirección');
-      this.ffsjAlertService.info('Respuesta guardada correctamente. No se ha encontrado la URL de redirección.');
-      window.location.href = this.cookiesService.get('https://consultas.hogueras.es');
+    const returnUrl = this.consultasExtraService.getReturnUrlOrFallback('/consultas');
+    if (this.consultasExtraService.isExternalUrl(returnUrl)) {
+      this.navigationService.navigateExternal(returnUrl);
+      return;
     }
+    this.router.navigateByUrl(returnUrl);
   }
+
+  private async resolveAsistencias(consultaId: number) {
+    const storedAsistencias = this.consultasExtraService.getAsistencias();
+    if (storedAsistencias.length > 0) {
+      return storedAsistencias;
+    }
+
+    const idAsociado = this.consultasExtraService.getIdUsuario();
+    if (idAsociado <= 0) {
+      return [];
+    }
+
+    const response: any = await firstValueFrom(
+      this.autorizacionesConsultasService.consultasIdConsultaAutorizadosGet(consultaId, 'body', false, idAsociado)
+    );
+    if (response.status.status !== 200 || !Array.isArray(response.autorizaciones)) {
+      return [];
+    }
+
+    const asistencias = response.autorizaciones.map((autorizacion: any) => autorizacion.idAsistencia).filter((id: any) => Number.isFinite(id));
+    this.consultasExtraService.setAsistencias(asistencias);
+    return asistencias;
+  }
+
+  private captureReturnUrl() {
+    const returnUrlFromState = this.router.getCurrentNavigation()?.extras?.state?.['returnUrl'] ?? null;
+    const returnUrlFromQuery = this.activatedRoute.snapshot.queryParamMap.get('returnUrl');
+    this.consultasExtraService.setReturnUrl(returnUrlFromState || returnUrlFromQuery);
+  }
+
+  private captureAsistencias() {
+    const asistenciasParam = this.activatedRoute.snapshot.queryParamMap.get('asistencias')
+      || this.activatedRoute.snapshot.queryParamMap.get('idAsistencia');
+    this.consultasExtraService.applyAsistenciasFromParam(asistenciasParam);
+  }
+
 
 }

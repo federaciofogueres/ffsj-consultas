@@ -1,0 +1,114 @@
+@use '../../../styles' as *;
+
+.consultas-page {
+  padding: 2.5rem 0 3rem;
+}
+
+.consultas-hero {
+  background: linear-gradient(135deg, rgba(0, 51, 160, 0.12), rgba(0, 193, 213, 0.18));
+  border: 1px solid rgba(0, 51, 160, 0.18);
+  border-radius: 20px;
+  padding: 2rem 2.25rem;
+  box-shadow: 0 12px 32px rgba(0, 51, 160, 0.08);
+  margin-bottom: 2rem;
+}
+
+.consultas-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: $azul-oscuro-color;
+  background: rgba(241, 180, 52, 0.25);
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.consultas-hero__title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: $azul-oscuro-color;
+  margin-bottom: 0.5rem;
+}
+
+.consultas-hero__copy {
+  color: #23304a;
+  margin-bottom: 0.5rem;
+}
+
+.consultas-list {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.consulta-card {
+  border: 1px solid rgba(0, 51, 160, 0.15);
+  background: #fff;
+  padding: 1.5rem 1.75rem;
+  border-radius: 18px;
+  text-align: left;
+  width: 100%;
+  box-shadow: 0 8px 24px rgba(14, 35, 74, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.consulta-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0, 51, 160, 0.4);
+  box-shadow: 0 12px 32px rgba(14, 35, 74, 0.12);
+}
+
+.consulta-card__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.consulta-card__title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1b2342;
+  margin: 0;
+}
+
+.consulta-card__badge {
+  background: rgba(0, 51, 160, 0.12);
+  color: $azul-oscuro-color;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+}
+
+.consulta-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 576px) {
+  .consultas-hero {
+    padding: 1.5rem;
+  }
+
+  .consultas-hero__title {
+    font-size: 1.6rem;
+  }
+
+  .consulta-card {
+    padding: 1.25rem 1.4rem;
+  }
+
+  .consulta-card__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

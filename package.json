@@ -7,6 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "test:coverage": "ng test --code-coverage",
     "serve:ssr:ffsj-consultas": "node dist/ffsj-consultas/server/server.mjs"
   },
   "private": true,

@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  *//* tslint:disable:no-unused-variable member-ordering */
 
-import { HttpClient, HttpEvent, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable, Optional } from '@angular/core';
 
 import { Observable } from 'rxjs';
@@ -63,10 +63,10 @@ export class AutorizacionesConsultasService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public consultasIdConsultaAutorizadosGet(idConsulta: number, observe?: 'body', reportProgress?: boolean): Observable<ResponseAutorizaciones>;
-    public consultasIdConsultaAutorizadosGet(idConsulta: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ResponseAutorizaciones>>;
-    public consultasIdConsultaAutorizadosGet(idConsulta: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ResponseAutorizaciones>>;
-    public consultasIdConsultaAutorizadosGet(idConsulta: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public consultasIdConsultaAutorizadosGet(idConsulta: number, observe?: 'body', reportProgress?: boolean, idAsociado?: number): Observable<ResponseAutorizaciones>;
+    public consultasIdConsultaAutorizadosGet(idConsulta: number, observe?: 'response', reportProgress?: boolean, idAsociado?: number): Observable<HttpResponse<ResponseAutorizaciones>>;
+    public consultasIdConsultaAutorizadosGet(idConsulta: number, observe?: 'events', reportProgress?: boolean, idAsociado?: number): Observable<HttpEvent<ResponseAutorizaciones>>;
+    public consultasIdConsultaAutorizadosGet(idConsulta: number, observe: any = 'body', reportProgress: boolean = false, idAsociado?: number ): Observable<any> {
 
         if (idConsulta === null || idConsulta === undefined) {
             throw new Error('Required parameter idConsulta was null or undefined when calling consultasIdConsultaAutorizadosGet.');
@@ -94,10 +94,17 @@ export class AutorizacionesConsultasService {
         const consumes: string[] = [
         ];
 
+        let queryParameters = new HttpParams();
+
+        if (idAsociado !== null && idAsociado !== undefined) {
+            queryParameters = queryParameters.set('idAsociado', idAsociado as any);
+        }
+
         return this.httpClient.request<ResponseAutorizaciones>('get',`${this.basePath}/consultas/${encodeURIComponent(String(idConsulta))}/autorizados`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
+                params: queryParameters,
                 observe: observe,
                 reportProgress: reportProgress
             }

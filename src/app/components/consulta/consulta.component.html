@@ -1,16 +1,16 @@
 @if (loading) {
 <lib-ffsj-spinner [fullscreen]="true"></lib-ffsj-spinner>
 } @else {
-<div class="container pt-4">
+<div class="container pt-4 consulta-page">
 
     @if (consulta.preguntas.length === 1) {
     <!-- SOLO 1 PREGUNTA: SIN SWIPER -->
     @let pregunta = consulta.preguntas[0];
 
-    <div class="container">
+    <div class="consulta-content">
         <app-pregunta [pregunta]="pregunta"></app-pregunta>
 
-        <div class="mx-3 mt-3">
+        <div class="consulta-options">
             <app-opciones [opciones]="pregunta.opcionesRespuestas"
                 (respuestaSeleccionada)="guardaRespuesta($event)"></app-opciones>
         </div>
@@ -22,10 +22,10 @@
         <swiper-container slides-per-view="1" navigation>
             @for (pregunta of consulta.preguntas; track $index) {
             <swiper-slide>
-                <div class="container">
+                <div class="consulta-content">
                     <app-pregunta [pregunta]="pregunta"></app-pregunta>
 
-                    <div class="mx-3 mt-3">
+                    <div class="consulta-options">
                         <app-opciones [opciones]="pregunta.opcionesRespuestas"
                             (respuestaSeleccionada)="guardaRespuesta($event)"></app-opciones>
                     </div>
@@ -36,7 +36,7 @@
     </div>
     }
 
-    <div class="d-flex justify-content-center mt-4">
+    <div class="consulta-actions">
         <button class="btn btn-primary" (click)="enviarRespuestas()"
             [disabled]="respuestasTotales !== consulta.preguntas.length">
             Enviar respuestas

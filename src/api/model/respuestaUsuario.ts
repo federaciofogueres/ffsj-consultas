@@ -13,6 +13,7 @@
 export interface RespuestaUsuario { 
     id: number;
     idAsistencia: number;
+    idAsociado?: number;
     idPregunta: number;
     idOpcionRespuesta: number;
 }

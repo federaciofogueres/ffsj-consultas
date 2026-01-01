@@ -3,24 +3,31 @@
         [fullscreen]="true"
     ></lib-ffsj-spinner>
 } @else {
-    <div class="container">
-        <div class="d-flex flex-column gap-3">
-            <span>
-                Bienvendio y bievenida a la aplicación de consultas de la Federació de Les Fogueres de Sant Joan.
-            </span>
-            <span>
+    <div class="container consultas-page">
+        <div class="consultas-hero">
+            <div class="consultas-hero__badge">Consultas</div>
+            <h1 class="consultas-hero__title">Consultas FFSJ</h1>
+            <p class="consultas-hero__copy">
+                Bienvendio y bievenida a la aplicaci?n de consultas de la Federaci? de Les Fogueres de Sant Joan.
+            </p>
+            <p class="consultas-hero__copy">
                 Por favor, selecciona una consulta para participar en ella.
-            </span>
-            <div class="d-flex flex-column gap-3">
-                @for (consulta of consultas; track $index) {
-                    <div class="card mb-3" (click)="loadConsulta(consulta)">
-                        <div class="card-body">
-                          <h5 class="card-title">{{ consulta.titulo }}</h5>
-                          <p class="card-text">{{ consulta.fecha }}</p>
-                        </div>
+            </p>
+        </div>
+        <div class="consultas-list">
+            @for (consulta of consultas; track $index) {
+                <button class="consulta-card" type="button" (click)="loadConsulta(consulta)">
+                    <div class="consulta-card__header">
+                        <h2 class="consulta-card__title">{{ consulta.titulo }}</h2>
+                        <span class="consulta-card__badge">Disponible</span>
                     </div>
-                }
-            </div>
+                    <div class="consulta-card__meta">
+                        <span>Fecha: {{ consulta.fecha }}</span>
+                        <span>Preguntas: {{ consulta.preguntas?.length ?? 0 }}</span>
+                        <span>Votos: {{ consulta.votosTotales }}</span>
+                    </div>
+                </button>
+            }
         </div>
     </div>
 }
