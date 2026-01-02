@@ -176,9 +176,33 @@ export class ConsultaComponent {
   enviarRespuestas() {
     this.loading = true;
     console.log('Enviando respuestas -> ', this.respuestas);
-    const promesasDeEnvio = this.respuestas.map(respuesta => 
+    const agrupadas = new Map<string, { idAsistencia: number; idPregunta: number; opciones: number[] }>();
+    this.respuestas.forEach((respuesta) => {
+      const opciones = Array.isArray(respuesta.idOpcionRespuesta)
+        ? respuesta.idOpcionRespuesta
+        : [respuesta.idOpcionRespuesta];
+      const key = `${respuesta.idAsistencia}-${respuesta.idPregunta}`;
+      const existing = agrupadas.get(key);
+      if (!existing) {
+        agrupadas.set(key, {
+          idAsistencia: respuesta.idAsistencia,
+          idPregunta: respuesta.idPregunta,
+          opciones: [...opciones]
+        });
+        return;
+      }
+      existing.opciones.push(...opciones);
+    });
+
+    const promesasDeEnvio = Array.from(agrupadas.values()).map(grupo => 
       new Promise((resolve, reject) => {
-        this.respuestasUsuariosService.respuestasUsuariosPost(respuesta).subscribe({
+        const payload = {
+          id: 0,
+          idAsistencia: grupo.idAsistencia,
+          idPregunta: grupo.idPregunta,
+          idOpcionRespuesta: Array.from(new Set(grupo.opciones))
+        };
+        this.respuestasUsuariosService.respuestasUsuariosPost(payload as RespuestaUsuario).subscribe({
           next: (response: ResponseStatus) => {
             console.log('Respuestas enviadas -> ', response);
             resolve(response);

@@ -15,5 +15,5 @@ export interface RespuestaUsuario {
     idAsistencia: number;
     idAsociado?: number;
     idPregunta: number;
-    idOpcionRespuesta: number;
+    idOpcionRespuesta: number | number[];
 }
