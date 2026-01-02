@@ -4,20 +4,40 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+}
 
-    .respuesta {
-        color: $azul-oscuro-color;
-        --mat-radio-disabled-selected-icon-color: #0033A0;
-        --mat-radio-disabled-unselected-icon-color: #0033A0;
-        --mat-radio-unselected-focus-icon-color: #0033A0;
-        --mat-radio-unselected-hover-icon-color: #0033A0;
-        --mat-radio-unselected-icon-color: #0033A0;
-        --mat-radio-unselected-pressed-icon-color: #0033A0;
-        --mat-radio-selected-focus-icon-color: #0033A0;
-        --mat-radio-selected-hover-icon-color: #0033A0;
-        --mat-radio-selected-icon-color: #0033A0;
-        --mat-radio-selected-pressed-icon-color: #0033A0;
-        --mat-mdc-radio-ripple-color: #0033A0;
-        --mat-mdc-radio-checked-ripple-color: #0033A0;
-    }
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.container {
+    max-height: 100%;
+    overflow: hidden;
+}
+
+.respuesta {
+    color: $azul-oscuro-color;
+    --mat-radio-disabled-selected-icon-color: #0033A0;
+    --mat-radio-disabled-unselected-icon-color: #0033A0;
+    --mat-radio-unselected-focus-icon-color: #0033A0;
+    --mat-radio-unselected-hover-icon-color: #0033A0;
+    --mat-radio-unselected-icon-color: #0033A0;
+    --mat-radio-unselected-pressed-icon-color: #0033A0;
+    --mat-radio-selected-focus-icon-color: #0033A0;
+    --mat-radio-selected-hover-icon-color: #0033A0;
+    --mat-radio-selected-icon-color: #0033A0;
+    --mat-radio-selected-pressed-icon-color: #0033A0;
+    --mat-mdc-radio-ripple-color: #0033A0;
+    --mat-mdc-radio-checked-ripple-color: #0033A0;
+    --mdc-checkbox-selected-icon-color: #0033A0;
+    --mdc-checkbox-selected-hover-icon-color: #0033A0;
+    --mdc-checkbox-selected-focus-icon-color: #0033A0;
+    --mdc-checkbox-selected-pressed-icon-color: #0033A0;
+    --mdc-checkbox-unselected-icon-color: #0033A0;
+    --mdc-checkbox-unselected-hover-icon-color: #0033A0;
+    --mdc-checkbox-unselected-focus-icon-color: #0033A0;
+    --mdc-checkbox-unselected-pressed-icon-color: #0033A0;
+    --mdc-checkbox-selected-checkmark-color: #ffffff;
 }

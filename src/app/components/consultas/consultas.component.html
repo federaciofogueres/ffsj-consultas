@@ -19,7 +19,12 @@
                 <button class="consulta-card" type="button" (click)="loadConsulta(consulta)">
                     <div class="consulta-card__header">
                         <h2 class="consulta-card__title">{{ consulta.titulo }}</h2>
-                        <span class="consulta-card__badge">Disponible</span>
+                        <div class="consulta-card__badges">
+                            <span class="consulta-card__badge">Disponible</span>
+                            @if (consulta.hasVoted) {
+                                <span class="consulta-card__badge consulta-card__badge--voted">Ha votado</span>
+                            }
+                        </div>
                     </div>
                     <div class="consulta-card__meta">
                         <span>Fecha: {{ consulta.fecha }}</span>

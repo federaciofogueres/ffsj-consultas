@@ -1,12 +1,26 @@
 <div class="container">
-    <mat-radio-group
-        aria-labelledby="example-radio-group-label"
-        class="radio-group"
-        [formControl]="respuesta">
-        @for(opcion of opciones; track $index) {
-            <mat-radio-button class="respuesta" [value]="opcion">
-                {{opcion.respuesta}}
-            </mat-radio-button>
-        }
-    </mat-radio-group>
+    @if (esMultiple()) {
+        <div class="checkbox-group">
+            @for (opcion of opciones; track $index) {
+                <mat-checkbox
+                    class="respuesta"
+                    [checked]="isSeleccionada(opcion)"
+                    [disabled]="isDisabled(opcion)"
+                    (change)="toggleOpcion(opcion, $event.checked)">
+                    {{opcion.respuesta}}
+                </mat-checkbox>
+            }
+        </div>
+    } @else {
+        <mat-radio-group
+            aria-labelledby="example-radio-group-label"
+            class="radio-group"
+            [formControl]="respuesta">
+            @for(opcion of opciones; track $index) {
+                <mat-radio-button class="respuesta" [value]="opcion">
+                    {{opcion.respuesta}}
+                </mat-radio-button>
+            }
+        </mat-radio-group>
+    }
 </div>

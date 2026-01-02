@@ -1,17 +1,49 @@
 @use '../../../styles' as *;
 
 .consulta-page {
-  padding-bottom: 2rem;
+  padding-bottom: 3.25rem;
+  height: calc(100vh - 6rem);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .consulta-options {
   margin: 1.5rem 0 0;
+  max-height: 40vh;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.consulta-warning {
+  margin: 0 auto 1.5rem;
+  max-width: 720px;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  background: rgba(255, 215, 0, 0.18);
+  color: #3b2f00;
+  box-shadow: 0 10px 24px rgba(8, 15, 43, 0.08);
+}
+
+.consulta-warning__hint {
+  margin-top: 0.35rem;
+  font-size: 0.95rem;
+  color: #4a3a00;
 }
 
 .consulta-actions {
   margin-top: 1.75rem;
   display: flex;
   justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.swiper-frame {
+  position: relative;
+}
+
+.swiper-content {
+  padding: 0 4rem;
 }
 
 swiper-container {
@@ -23,14 +55,22 @@ swiper-slide {
   height: 100%;
 }
 
+
 .container-swipper {
-  height: calc(100vh - 16rem);
-  min-height: 360px;
-  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
 }
 
 @media (max-width: 576px) {
   .container-swipper {
-    height: calc(100vh - 14rem);
+    flex: 1;
+  }
+
+  .swiper-content {
+    padding: 0 2.75rem;
+  }
+
+  swiper-container {
+    --swiper-navigation-top-offset: 50%;
   }
 }

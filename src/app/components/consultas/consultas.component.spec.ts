@@ -107,4 +107,28 @@ describe('ConsultasComponent', () => {
 
     expect(consultasService.consultasAutorizadasGet).not.toHaveBeenCalled();
   });
+
+  it('muestra estado ha votado cuando la consulta lo indica', () => {
+    const fixture = TestBed.createComponent(ConsultasComponent);
+    fixture.componentInstance.ngOnInit = () => {};
+    fixture.detectChanges();
+
+    fixture.componentInstance.consultas = [
+      {
+        id: 3,
+        fecha: '2025-01-01',
+        titulo: 'Consulta',
+        votosTotales: 4,
+        hasVoted: true,
+        preguntas: []
+      }
+    ];
+    fixture.componentInstance.loading = false;
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const badge = compiled.querySelector('.consulta-card__badge--voted');
+    expect(badge).toBeTruthy();
+    expect(badge?.textContent).toContain('Ha votado');
+  });
 });

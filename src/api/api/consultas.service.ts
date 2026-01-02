@@ -19,6 +19,7 @@ import { Consulta } from '../model/consulta';
 import { ResponseConsulta } from '../model/responseConsulta';
 import { ResponseConsultas } from '../model/responseConsultas';
 import { ResponseStatus } from '../model/responseStatus';
+import { ResponseMisRespuestas } from '../model/responseMisRespuestas';
 import { ResultadoConsulta } from '../model/resultadoConsulta';
 
 import { Configuration } from '../configuration';
@@ -349,6 +350,122 @@ export class ConsultasService {
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Enviar participacion de una consulta
+     * 
+     * @param idConsulta 
+     * @param idAsistencia 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public consultasIdConsultaSubmitPost(idConsulta: number, idAsistencia: number, observe?: 'body', reportProgress?: boolean): Observable<ResponseStatus>;
+    public consultasIdConsultaSubmitPost(idConsulta: number, idAsistencia: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ResponseStatus>>;
+    public consultasIdConsultaSubmitPost(idConsulta: number, idAsistencia: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ResponseStatus>>;
+    public consultasIdConsultaSubmitPost(idConsulta: number, idAsistencia: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (idConsulta === null || idConsulta === undefined) {
+            throw new Error('Required parameter idConsulta was null or undefined when calling consultasIdConsultaSubmitPost.');
+        }
+
+        if (idAsistencia === null || idAsistencia === undefined) {
+            throw new Error('Required parameter idAsistencia was null or undefined when calling consultasIdConsultaSubmitPost.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<ResponseStatus>('post',`${this.basePath}/consultas/${encodeURIComponent(String(idConsulta))}/submit`,
+            {
+                body: { idAsistencia: idAsistencia },
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Obtener respuestas guardadas del usuario para una consulta
+     *
+     * @param idConsulta
+     * @param idAsistencias
+     * @param idAsociado
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public consultasIdConsultaRespuestasUsuariosGet(idConsulta: number, idAsistencias?: number[], idAsociado?: number, observe?: 'body', reportProgress?: boolean): Observable<ResponseMisRespuestas>;
+    public consultasIdConsultaRespuestasUsuariosGet(idConsulta: number, idAsistencias?: number[], idAsociado?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ResponseMisRespuestas>>;
+    public consultasIdConsultaRespuestasUsuariosGet(idConsulta: number, idAsistencias?: number[], idAsociado?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ResponseMisRespuestas>>;
+    public consultasIdConsultaRespuestasUsuariosGet(idConsulta: number, idAsistencias: number[] = [], idAsociado?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (idConsulta === null || idConsulta === undefined) {
+            throw new Error('Required parameter idConsulta was null or undefined when calling consultasIdConsultaMisRespuestasGet.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        let queryParameters = new HttpParams();
+        if (idAsistencias && idAsistencias.length > 0) {
+            idAsistencias.forEach(idAsistencia => {
+                queryParameters = queryParameters.append('idAsistencia', idAsistencia as any);
+            });
+        }
+        if (idAsociado !== null && idAsociado !== undefined) {
+            queryParameters = queryParameters.set('idAsociado', idAsociado as any);
+        }
+
+        return this.httpClient.request<ResponseMisRespuestas>('get',`${this.basePath}/consultas/${encodeURIComponent(String(idConsulta))}/respuestas-usuarios`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                params: queryParameters,
                 observe: observe,
                 reportProgress: reportProgress
             }

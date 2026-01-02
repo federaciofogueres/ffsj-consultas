@@ -16,5 +16,6 @@ export interface Consulta {
     fecha: string;
     titulo: string;
     votosTotales: number;
+    hasVoted?: boolean;
     preguntas: Array<Pregunta>;
 }

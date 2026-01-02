@@ -3,8 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService, FfsjAlertService, FfsjSpinnerComponent } from 'ffsj-web-components';
 import { jwtDecode } from "jwt-decode";
 import { firstValueFrom } from 'rxjs';
-import { AutorizacionesConsultasService, Consulta, ConsultasService, OpcionRespuesta, ResponseConsulta, ResponseStatus, RespuestasUsuariosService, RespuestaUsuario } from '../../../api';
-import { OpcionesComponent } from '../opciones/opciones.component';
+import { AutorizacionesConsultasService, Consulta, ConsultasService, ResponseConsulta, ResponseMisRespuestas, ResponseStatus, RespuestasUsuariosService, RespuestaUsuario } from '../../../api';
+import { OpcionesComponent, OpcionesSeleccionadasEvent } from '../opciones/opciones.component';
 import { PreguntaComponent } from '../pregunta/pregunta.component';
 import { ConsultasExtraService } from '../../services/consultas-extra.service';
 import { NavigationService } from '../../services/navigation.service';
@@ -36,6 +36,10 @@ export class ConsultaComponent {
   }
   respuestas: RespuestaUsuario[] = [];
   respuestasTotales: number = 0;
+  totalPreguntasObligatorias: number = 0;
+  respuestasPrevias: Record<number, number[]> = {};
+  tieneRespuestasPrevias: boolean = false;
+  tieneDiscrepancias: boolean = false;
 
   constructor(
     private consultasService: ConsultasService,
@@ -113,9 +117,17 @@ export class ConsultaComponent {
           console.log(this.idUsuario);
           
           this.consulta = response.consulta;
+          this.respuestasPrevias = {};
+          this.tieneRespuestasPrevias = false;
+          this.tieneDiscrepancias = false;
           this.consulta.preguntas.forEach(pregunta => {
             pregunta.opcionesRespuestas.sort((a, b) => a.respuesta.localeCompare(b.respuesta));
           });
+          this.totalPreguntasObligatorias = this.consulta.preguntas.filter(pregunta => pregunta.obligatoria).length;
+          this.loadRespuestasPrevias(consultaId).finally(() => {
+            this.loading = false;
+          });
+        } else {
           this.loading = false;
         }
       },
@@ -131,27 +143,34 @@ export class ConsultaComponent {
     this.idUsuario = decodedToken.id;
   }
 
-  guardaRespuesta(respuesta: OpcionRespuesta) {
-    console.log('Guardando respuesta', respuesta);
+  guardaRespuestas(event: OpcionesSeleccionadasEvent) {
+    const idPregunta = event.idPregunta;
+    const opcionesSeleccionadas = event.opciones ?? [];
     this.asistenciasAutorizadas.forEach(asistencia => {
-      let respuestaUsuario: RespuestaUsuario = {
-        id: 0,
-        idAsistencia: asistencia,
-        idPregunta: respuesta.idPregunta,
-        idOpcionRespuesta: respuesta.id
-      }
-      this.almacenarRespuesta(respuestaUsuario)
+      this.respuestas = this.respuestas.filter(
+        respuesta => !(respuesta.idPregunta === idPregunta && respuesta.idAsistencia === asistencia)
+      );
+      opcionesSeleccionadas.forEach(opcion => {
+        const respuestaUsuario: RespuestaUsuario = {
+          id: 0,
+          idAsistencia: asistencia,
+          idPregunta: opcion.idPregunta,
+          idOpcionRespuesta: opcion.id
+        };
+        this.respuestas.push(respuestaUsuario);
+      });
     });
-    const preguntasUnicas = new Set(this.respuestas.map(r => r.idPregunta));
-    this.respuestasTotales = preguntasUnicas.size;
+    this.actualizarRespuestasTotales();
   }
 
-  almacenarRespuesta(respuestaUsuario: RespuestaUsuario) {
-    const indiceExistente = this.respuestas.findIndex(r => r.idPregunta === respuestaUsuario.idPregunta && r.idAsistencia === respuestaUsuario.idAsistencia);
-    if (indiceExistente !== -1) {
-      this.respuestas.splice(indiceExistente, 1);
-    }
-    this.respuestas.push(respuestaUsuario);
+  private actualizarRespuestasTotales() {
+    const idsObligatorias = new Set(
+      this.consulta.preguntas.filter(pregunta => pregunta.obligatoria).map(pregunta => pregunta.id)
+    );
+    const preguntasRespondidas = new Set(
+      this.respuestas.map(respuesta => respuesta.idPregunta).filter(id => idsObligatorias.has(id))
+    );
+    this.respuestasTotales = preguntasRespondidas.size;
   }
 
   enviarRespuestas() {
@@ -190,6 +209,39 @@ export class ConsultaComponent {
       return;
     }
     this.router.navigateByUrl(returnUrl);
+  }
+
+  private async loadRespuestasPrevias(consultaId: number) {
+    if (this.asistenciasAutorizadas.length === 0) {
+      return;
+    }
+    try {
+      const idAsociado = this.consultasExtraService.getIdUsuario();
+      const response: ResponseMisRespuestas = await firstValueFrom(
+        this.consultasService.consultasIdConsultaRespuestasUsuariosGet(consultaId, this.asistenciasAutorizadas, idAsociado > 0 ? idAsociado : undefined)
+      );
+      if (response.status.status !== 200 || !response.misRespuestas) {
+        return;
+      }
+      this.applyRespuestasPrevias(response.misRespuestas);
+    } catch (error) {
+      console.error('Error al cargar respuestas previas -> ', error);
+    }
+  }
+
+  private applyRespuestasPrevias(misRespuestas: { hasPrevias: boolean; respuestas: { idPregunta: number; opciones: number[]; hasDiscrepancias: boolean }[] }) {
+    this.tieneRespuestasPrevias = Boolean(misRespuestas.hasPrevias);
+    this.tieneDiscrepancias = Array.isArray(misRespuestas.respuestas)
+      ? misRespuestas.respuestas.some(respuesta => respuesta.hasDiscrepancias)
+      : false;
+
+    const respuestasPrevias: Record<number, number[]> = {};
+    if (Array.isArray(misRespuestas.respuestas)) {
+      misRespuestas.respuestas.forEach(respuesta => {
+        respuestasPrevias[respuesta.idPregunta] = Array.isArray(respuesta.opciones) ? respuesta.opciones : [];
+      });
+    }
+    this.respuestasPrevias = respuestasPrevias;
   }
 
   private async resolveAsistencias(consultaId: number) {

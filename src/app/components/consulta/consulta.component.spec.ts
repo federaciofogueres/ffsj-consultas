@@ -104,6 +104,18 @@ describe('ConsultaComponent', () => {
 
   it('construye respuestas con idAsistencia', () => {
     component.asistenciasAutorizadas = [101];
+    component.consulta.preguntas = [
+      {
+        id: 3,
+        titulo: 'Pregunta',
+        enunciado: 'Enunciado',
+        active: true,
+        idConsulta: 1,
+        respuestasMaximas: 1,
+        obligatoria: true,
+        opcionesRespuestas: []
+      }
+    ];
     const respuesta: OpcionRespuesta = {
       id: 2,
       idPregunta: 3,
@@ -111,8 +123,21 @@ describe('ConsultaComponent', () => {
       active: true
     };
 
-    component.guardaRespuesta(respuesta);
+    component.guardaRespuestas({ idPregunta: 3, opciones: [respuesta] });
 
     expect(component.respuestas[0].idAsistencia).toBe(101);
+  });
+
+  it('aplica respuestas previas con discrepancias', () => {
+    (component as any).applyRespuestasPrevias({
+      hasPrevias: true,
+      respuestas: [
+        { idPregunta: 3, opciones: [5], hasDiscrepancias: true }
+      ]
+    });
+
+    expect(component.tieneRespuestasPrevias).toBeTrue();
+    expect(component.tieneDiscrepancias).toBeTrue();
+    expect(component.respuestasPrevias[3]).toEqual([5]);
   });
 });

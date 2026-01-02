@@ -17,5 +17,7 @@ export interface Pregunta {
     enunciado: string;
     active: boolean;
     idConsulta: number;
+    respuestasMaximas?: number;
+    obligatoria?: boolean;
     opcionesRespuestas: Array<OpcionRespuesta>;
 }

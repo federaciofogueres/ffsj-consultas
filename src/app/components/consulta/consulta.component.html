@@ -3,6 +3,17 @@
 } @else {
 <div class="container pt-4 consulta-page">
 
+    @if (tieneRespuestasPrevias) {
+    <div class="consulta-warning">
+        <strong>Atención:</strong> Al enviar, se modificarán tus votaciones guardadas.
+        @if (tieneDiscrepancias) {
+        <div class="consulta-warning__hint">
+            Se detectaron diferencias entre tus asistencias. Revisa las respuestas antes de enviar.
+        </div>
+        }
+    </div>
+    }
+
     @if (consulta.preguntas.length === 1) {
     <!-- SOLO 1 PREGUNTA: SIN SWIPER -->
     @let pregunta = consulta.preguntas[0];
@@ -11,23 +22,33 @@
         <app-pregunta [pregunta]="pregunta"></app-pregunta>
 
         <div class="consulta-options">
-            <app-opciones [opciones]="pregunta.opcionesRespuestas"
-                (respuestaSeleccionada)="guardaRespuesta($event)"></app-opciones>
+            <app-opciones
+                [opciones]="pregunta.opcionesRespuestas"
+                [respuestasMaximas]="pregunta.respuestasMaximas || 1"
+                [idPregunta]="pregunta.id"
+                [preseleccionadas]="respuestasPrevias[pregunta.id] || []"
+                (respuestasSeleccionadas)="guardaRespuestas($event)">
+            </app-opciones>
         </div>
     </div>
 
     } @else {
     <!-- VARIAS PREGUNTAS: CON SWIPER -->
-    <div class="container-swipper">
+    <div class="container-swipper swiper-frame">
         <swiper-container slides-per-view="1" navigation>
             @for (pregunta of consulta.preguntas; track $index) {
             <swiper-slide>
-                <div class="consulta-content">
+                <div class="consulta-content swiper-content">
                     <app-pregunta [pregunta]="pregunta"></app-pregunta>
 
                     <div class="consulta-options">
-                        <app-opciones [opciones]="pregunta.opcionesRespuestas"
-                            (respuestaSeleccionada)="guardaRespuesta($event)"></app-opciones>
+                        <app-opciones
+                            [opciones]="pregunta.opcionesRespuestas"
+                            [respuestasMaximas]="pregunta.respuestasMaximas || 1"
+                            [idPregunta]="pregunta.id"
+                            [preseleccionadas]="respuestasPrevias[pregunta.id] || []"
+                            (respuestasSeleccionadas)="guardaRespuestas($event)">
+                        </app-opciones>
                     </div>
                 </div>
             </swiper-slide>
@@ -38,7 +59,7 @@
 
     <div class="consulta-actions">
         <button class="btn btn-primary" (click)="enviarRespuestas()"
-            [disabled]="respuestasTotales !== consulta.preguntas.length">
+            [disabled]="respuestasTotales !== totalPreguntasObligatorias">
             Enviar respuestas
         </button>
     </div>
