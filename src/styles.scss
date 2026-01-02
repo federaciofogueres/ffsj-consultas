@@ -1,12 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 
+@use 'sass:color';
 @use 'bootstrap/scss/bootstrap';
 @use 'swiper/swiper-bundle.css';
+@use './variables' as *;
 
-$azul-oscuro-color: #0033A0;
-$azul-claro-color: #00C1D5;
-$naranja-color: #F1B434;
-
+$azul-oscuro-color: $rojo;
+$azul-claro-color: $salmon;
+$naranja-color: $naranja;
 html,
 body {
     height: 100%;
@@ -15,4 +16,27 @@ body {
 body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+:root {
+    --mat-sys-primary: #{$naranja};
+    --mat-sys-secondary: #{$rojo};
+    --mat-sys-tertiary: #{$salmon};
+    --mdc-theme-primary: #{$naranja};
+}
+
+.btn-primary {
+    background-color: $naranja;
+    border-color: $naranja;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: color.adjust($naranja, $lightness: -6%);
+    border-color: color.adjust($naranja, $lightness: -6%);
+}
+
+.btn-primary:disabled {
+    background-color: rgba($naranja, 0.5);
+    border-color: rgba($naranja, 0.5);
 }

@@ -1,4 +1,4 @@
-@use '../../../styles' as *;
+@use '../../../variables' as *;
 
 .header-pregunta {
     width: 100%;
@@ -19,7 +19,7 @@
         }
 
         .numero {
-            background-color: $azul-oscuro-color;
+            background-color: $rojo;
             color: white;
             text-align: center;
             padding: 5px 0px;
@@ -27,7 +27,7 @@
 
         .titulo {
             text-align: center;
-            color: $azul-oscuro-color;
+            color: $naranja;
         }
     }
 

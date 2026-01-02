@@ -1,4 +1,4 @@
-@use '../../../styles' as *;
+@use '../../../variables' as *;
 
 .consulta-page {
   padding-bottom: 3.25rem;
@@ -20,15 +20,15 @@
   max-width: 720px;
   padding: 0.85rem 1rem;
   border-radius: 12px;
-  background: rgba(255, 215, 0, 0.18);
-  color: #3b2f00;
-  box-shadow: 0 10px 24px rgba(8, 15, 43, 0.08);
+  background: rgba($naranja, 0.2);
+  color: $naranja;
+  box-shadow: 0 10px 24px rgba($naranja, 0.18);
 }
 
 .consulta-warning__hint {
   margin-top: 0.35rem;
   font-size: 0.95rem;
-  color: #4a3a00;
+  color: $naranja;
 }
 
 .consulta-actions {
@@ -48,6 +48,7 @@
 
 swiper-container {
   --swiper-navigation-top-offset: 50%;
+  --swiper-navigation-color: #{$rojo};
   height: 100%;
 }
 

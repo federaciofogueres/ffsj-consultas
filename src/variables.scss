@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 $azul-oscuro: #0033A0;
 $asociaciones-primary: #DC3545;
 $asociados-primary: #FAD557;
@@ -9,6 +11,8 @@ $sincronizacion-primary: #f382f3;
 $naranja: #e3741c;
 $rojo: #c4141c;
 $salmon: #dc7c7c;
+$ffsj-ink: color.adjust($rojo, $lightness: -18%);
+$ffsj-soft: rgba($naranja, 0.18);
 
 .invalid-field {
     color: $rojo;

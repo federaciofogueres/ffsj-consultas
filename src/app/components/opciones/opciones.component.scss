@@ -1,4 +1,4 @@
-@import '../../../styles.scss';
+@use '../../../variables' as *;
 
 .radio-group {
     display: flex;
@@ -18,26 +18,49 @@
 }
 
 .respuesta {
-    color: $azul-oscuro-color;
-    --mat-radio-disabled-selected-icon-color: #0033A0;
-    --mat-radio-disabled-unselected-icon-color: #0033A0;
-    --mat-radio-unselected-focus-icon-color: #0033A0;
-    --mat-radio-unselected-hover-icon-color: #0033A0;
-    --mat-radio-unselected-icon-color: #0033A0;
-    --mat-radio-unselected-pressed-icon-color: #0033A0;
-    --mat-radio-selected-focus-icon-color: #0033A0;
-    --mat-radio-selected-hover-icon-color: #0033A0;
-    --mat-radio-selected-icon-color: #0033A0;
-    --mat-radio-selected-pressed-icon-color: #0033A0;
-    --mat-mdc-radio-ripple-color: #0033A0;
-    --mat-mdc-radio-checked-ripple-color: #0033A0;
-    --mdc-checkbox-selected-icon-color: #0033A0;
-    --mdc-checkbox-selected-hover-icon-color: #0033A0;
-    --mdc-checkbox-selected-focus-icon-color: #0033A0;
-    --mdc-checkbox-selected-pressed-icon-color: #0033A0;
-    --mdc-checkbox-unselected-icon-color: #0033A0;
-    --mdc-checkbox-unselected-hover-icon-color: #0033A0;
-    --mdc-checkbox-unselected-focus-icon-color: #0033A0;
-    --mdc-checkbox-unselected-pressed-icon-color: #0033A0;
+    color: $ffsj-ink;
+    --mat-sys-primary: #{$naranja};
+    --mat-radio-disabled-selected-icon-color: #{$naranja};
+    --mat-radio-disabled-unselected-icon-color: #{$naranja};
+    --mat-radio-unselected-focus-icon-color: #{$naranja};
+    --mat-radio-unselected-hover-icon-color: #{$naranja};
+    --mat-radio-unselected-icon-color: #{$naranja};
+    --mat-radio-unselected-pressed-icon-color: #{$naranja};
+    --mat-radio-selected-focus-icon-color: #{$naranja};
+    --mat-radio-selected-hover-icon-color: #{$naranja};
+    --mat-radio-selected-icon-color: #{$naranja};
+    --mat-radio-selected-pressed-icon-color: #{$naranja};
+    --mat-mdc-radio-ripple-color: #{$naranja};
+    --mat-mdc-radio-checked-ripple-color: #{$naranja};
+    --mdc-checkbox-selected-container-color: #{$naranja};
+    --mdc-checkbox-selected-hover-container-color: #{$naranja};
+    --mdc-checkbox-selected-focus-container-color: #{$naranja};
+    --mdc-checkbox-selected-pressed-container-color: #{$naranja};
+    --mdc-checkbox-selected-icon-color: #{$naranja};
+    --mdc-checkbox-selected-hover-icon-color: #{$naranja};
+    --mdc-checkbox-selected-focus-icon-color: #{$naranja};
+    --mdc-checkbox-selected-pressed-icon-color: #{$naranja};
+    --mdc-checkbox-unselected-icon-color: #{$naranja};
+    --mdc-checkbox-unselected-hover-icon-color: #{$naranja};
+    --mdc-checkbox-unselected-focus-icon-color: #{$naranja};
+    --mdc-checkbox-unselected-pressed-icon-color: #{$naranja};
     --mdc-checkbox-selected-checkmark-color: #ffffff;
+}
+
+:host ::ng-deep .mat-mdc-checkbox .mdc-checkbox__background {
+    border-color: $naranja;
+}
+
+:host ::ng-deep .mat-mdc-checkbox .mdc-checkbox__native-control:enabled:checked ~ .mdc-checkbox__background,
+:host ::ng-deep .mat-mdc-checkbox .mdc-checkbox__native-control:enabled:indeterminate ~ .mdc-checkbox__background {
+    background-color: $naranja;
+    border-color: $naranja;
+}
+
+:host ::ng-deep .mat-mdc-checkbox .mdc-checkbox__native-control:enabled ~ .mdc-checkbox__background {
+    border-color: $naranja;
+}
+
+:host ::ng-deep .mat-mdc-checkbox .mdc-checkbox__checkmark-path {
+    stroke: #ffffff;
 }
